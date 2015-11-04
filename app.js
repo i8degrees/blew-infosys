@@ -134,15 +134,17 @@ app.use(function(err, req, res, next) {
 
 // TODO(jeff): Relocate..?
 var rpc = require('rpc.js');
+
+// NOTE(jeff): API Schema
 var rpcJS = rpc.gateway( {schema: require('./lib/api.js')} );
 
 // TODO(jeff): Relocate..?
 // HTTP-RPC server for our API
-rpc.server('http', {
-  port: process.env.PORT || 3001,
-  address: process.env.RPC_HOST || "localhost",
-  gateway: rpcJS // API Schema
-});
+// rpc.server('http', {
+//   port: process.env.PORT || 3001,
+//   address: process.env.RPC_HOST || "localhost",
+//   gateway: rpcJS // API Schema
+// });
 
 if(app.get('env') === 'development') {
 

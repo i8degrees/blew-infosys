@@ -3,8 +3,95 @@ var router = express.Router();
 
 var rpc = require('rpc.js');
 var rpcJs = rpc.gateway( { schema: require('../lib/api') } );
-
+var handle = require('../lib/db');
 var assert = require('assert');
+
+// NOTE(jeff): JSON RPC routes
+
+router.post('/properties/list_pr/', function(req, res){
+
+  var params = req.query;
+
+  // NOTE(jeff): Initialize our database link
+  handle.create_connection();
+
+  rpcJs.input({
+    input: { method: 'list_pr', params: params },
+    callback: function(output) {
+      res.writeHead(200, {'Content-Type': 'application/json'});
+      res.end(JSON.stringify(output.result));
+      // res.render('properties', { pr_rows: output.result } );
+    }
+  });
+});
+
+router.delete('/properties/destroy/:property_id', function(req, res) {
+
+  // NOTE(jeff): Initialize our database link
+  handle.create_connection();
+
+  rpcJs.input({
+    input: { method: 'delete_job', params: { pid: req.params.property_id } },
+    callback: function(output) {
+      res.writeHead(200, {'Content-Type': 'application/json'});
+      res.end(JSON.stringify(output.result));
+      // res.render('properties', { pr_rows: output.result } );
+    }
+  });
+});
+
+router.post('/properties/list_job_status/', function(req, res){
+
+  var params = req.query;
+
+  // NOTE(jeff): Initialize our database link
+  handle.create_connection();
+
+  rpcJs.input({
+    input: { method: 'list_job_status', params: params },
+    callback: function(output) {
+      res.writeHead(200, {'Content-Type': 'application/json'});
+      res.end(JSON.stringify(output.result));
+      // res.render('properties', { pr_rows: output.result } );
+    }
+  });
+});
+
+router.post('/properties/update_pr/', function(req, res){
+
+  var params = req.query;
+
+  // NOTE(jeff): Initialize our database link
+  handle.create_connection();
+
+  rpcJs.input({
+    input: { method: 'update_pr', params: params },
+    callback: function(output) {
+      res.writeHead(200, {'Content-Type': 'application/json'});
+      res.end(JSON.stringify(output.result));
+      // res.render('properties', { pr_rows: output.result } );
+    }
+  });
+});
+
+router.post('/properties/create_job/', function(req, res){
+
+  var params = req.query;
+
+  // NOTE(jeff): Initialize our database link
+  handle.create_connection();
+
+  rpcJs.input({
+    input: { method: 'create_job', params: params },
+    callback: function(output) {
+      res.writeHead(200, {'Content-Type': 'application/json'});
+      res.end(JSON.stringify(output.result));
+      // res.render('properties', { pr_rows: output.result } );
+    }
+  });
+});
+
+// NOTE(jeff): HTTP routes
 
 // GET http://localhost:8888/api/properties/create
 router.get('/properties/create/', function(req, res) {
