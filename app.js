@@ -139,7 +139,7 @@ var rpcJS = rpc.gateway( {schema: require('./lib/api.js')} );
 // TODO(jeff): Relocate..?
 // HTTP-RPC server for our API
 rpc.server('http', {
-  port: process.env.RPC_PORT || 3001,
+  port: process.env.PORT || 3001,
   address: process.env.RPC_HOST || "localhost",
   gateway: rpcJS // API Schema
 });
@@ -159,7 +159,7 @@ if(app.get('env') === 'development') {
 
 module.exports = app;
 
-var port = Number(process.env.APP_PORT || 3000);
+var port = Number(process.env.PORT || 3000);
 
 var server = app.listen(port, function() {
   var tcp_family = server.address().family;
