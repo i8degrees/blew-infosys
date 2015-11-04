@@ -1,0 +1,13 @@
+extends layout
+
+block content
+  p Welcome to #{locals.settings.site_owner['name']}.
+
+  a(href="/api/properties/create/") Create a Job
+  br
+  a(href="/api/properties/") View Jobs
+  br
+  a(href="/api/status/") View Job Status
+  br
+  a(href="/api/contacts/") View Job Contacts
+  br

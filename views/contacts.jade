@@ -1,0 +1,53 @@
+extends layout
+
+mixin print_field()
+  if arguments != null
+    if arguments[0] && arguments[1]
+      p #{arguments[0]} #{arguments[1]}
+    else if arguments[1]
+      p #{arguments[1]}
+
+block content
+  script.
+    function go_back() {
+      window.history.back();
+    }
+
+  a(href="" onclick="window.history.back();") Go Back
+
+  h2 Contacts
+
+  if co_rows.length > 1
+    p Results: #{co_rows.length}
+  each contact in co_rows
+
+    +print_field("CID: ", contact.ClientKey)
+
+    +print_field("Contact: ", contact.Contact)
+    +print_field("Company: ", contact.Company)
+    +print_field("Address: ", contact.Address1)
+    +print_field(contact.Address2)
+    +print_field(contact.City, contact.State, contact.zip)
+
+    +print_field("ph: ", contact.PhoneHome)
+    +print_field("ph: ", contact.Phone1)
+    +print_field("ext: ", contact.Phone1Ext)
+
+    +print_field("fax: ", contact.PhoneFax)
+    +print_field("ext: ", contact.PhoneFaxExt)
+
+    +print_field("mobile: ", contact.PhoneMobile)
+    +print_field("ext: ", contact.PhoneMobileExt)
+
+    +print_field("pager: ", contact.PhonePager)
+    +print_field("ext: ", contact.PhonePagerExt)
+
+    +print_field("Email: ", contact.Email)
+    +print_field("Notes: ", contact.Notes)
+    +print_field("Assigned: ", contact.User1, contact.User2, contact.User3, contact.User4, contact.User5, contact.User6, contact.User7, contact.User8)
+
+    +print_field("category: ", contact.Category)
+    +print_field("created: ", contact.DateCreated)
+    +print_field("edited: ", contact.DateEdited)
+
+    hr

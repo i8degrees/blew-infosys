@@ -1,0 +1,37 @@
+# project binaries
+build
+third-party
+design
+node_modules
+*.xcf
+
+# Misc
+backups
+*.bck
+tmp
+public/testme.html
+sass/testme.scss
+keys/*
+
+# Site environment(s)
+.env
+.env.development
+.env.testing
+.env.staging
+.env.production
+.env.keys
+
+# ...additional site environments
+#.env.heroku-staging
+#.env.heroku-production
+
+# OS X Finder metadata
+*.DS_Store
+.LSOverride
+
+# Sublime Project metadata
+*.sublime-workspace
+
+# auto generated
+*.css
+*.css.map

@@ -1,0 +1,26 @@
+doctype html
+html
+  head
+    title= locals.settings.site_owner['company']
+
+    link(rel='stylesheet', href='/stylesheets/style.css')
+
+  // LiveReload
+  script.
+    document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')
+
+  body
+    h1= locals.settings.site_owner['company']
+    a(href="/") Home
+    &#32;-&#32;
+    a(href="/api/properties/create/") Create Job
+    &#32;-&#32;
+    a(href="/api/properties/") View Jobs
+    &#32;-&#32;
+    a(href="/api/status/") Status
+    &#32;-&#32;
+    a(href="/api/search/") Search
+    br
+    br
+
+    block content

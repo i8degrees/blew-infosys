@@ -1,0 +1,54 @@
+extends layout
+
+//- Create an option and potentially set its selected state (if the form has
+//- state) for a selection input type.
+//-
+//- param label     The text label to use
+//- param form_var  The variable used to determine selected state
+mixin select_option(label, form_var)
+  option(value= label, selected= form_var === label ? true : false)= label
+
+block content
+  script.
+    function go_back() {
+      window.history.back();
+    }
+
+  a(href="" onclick="go_back()") Go Back
+
+  h2 New Job
+
+  //- novalidate
+  form(action=locals.loc.pathname, method='POST')
+
+    br
+    label(for='job_number') Job Number:
+    input(type="text" id='job_number' name="jobnum" required)
+    br
+    label(for='job_client') Client Name:
+    input(type="text" id='job_client' name="client" required)
+    br
+    br
+    label(for='date') Need by date:
+    input(type="text" id='date' name="due_date")
+    br
+    br
+    label(for='job_status') Job Status:
+    select(id='job_status', name='status')
+      +select_option('Select status', status)
+      +select_option('Ordered', status)
+      +select_option('In the Field', status)
+      +select_option('In drafting', status)
+      +select_option('Needs Review', status)
+      +select_option('Revisions', status)
+      +select_option('Completed', status)
+    br
+    br
+    div(class='label')
+      //- +check_err( locals.input_errs['job'].notes )
+      label(for='job_notes') Job Notes:
+      //- span(class='req') Required
+    textarea(id='job_notes', name='notes', spellcheck='true', maxlength=4096)
+    br
+
+    button(type='submit', name='action', value='create_job') Create Job
