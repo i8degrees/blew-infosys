@@ -1,22 +1,14 @@
 # Notes
 
 ```console
-# TODO: Test passing of NULL params here
+# TODO: Test passing of NULL params on everything
 
-curl -i -X POST -d rpc='{"method":"update_pr","params":{"pid":"P2006121549330062039","jobnum":"","status":"1"}}' http://localhost:3001/help/../
-
-curl -i -X POST -d rpc='{"method":"update","params":{"jobnum":"0748", "cname":"Jeff", "caddr":"524"} }' http://127.0.0.1:3001/../
+curl -i -X POST -d rpc='{"method":"update_pr","params":{"pid":"P2006121549330062039","jobnum":"","status":"1"}}' http://localhost:3001/../
 
 # NULL check
 curl -i -X GET -d rpc='{"method":"list_pr","params":{}}' http://127.0.0.1:3001/../
 
 curl -i -X GET -d rpc='{"method":"list_pr","params":{"jobnum":"07-048"}}' http://127.0.0.1:3001/../
-
-# FIXME: Dump jobs that have *15-* in the JobNum field
-curl -i -X GET -d rpc='{"method":"list_pr","params":{"jobnum":"15-"}}' http://127.0.0.1:3001/../
-
-# FIXME: Dump rows that have the number 2006 in the property key
-curl -i -X GET -d rpc='{"method":"list_pr","params":{"pid":2006}}' http://127.0.0.1:3001/../
 
 # NULL check
 curl -i -X GET -d rpc='{"method":"list_co","params":{}}' http://127.0.0.1:3001/../
@@ -27,24 +19,16 @@ curl -i -X GET -d rpc='{"method":"list_co","params":{"cname":"Jeff"}}' http://12
 # Dump rows that have the number 2006 in the client key
 curl -i -X GET -d rpc='{"method":"list_co","params":{"cid":"2006"}}' http://127.0.0.1:3001/../
 
-# ...
+# List contacts
 curl -i -X GET -d rpc='{"method":"list_co","params":{ "cid": 2006, "cname": "Jeff"}}' http://127.0.0.1:3001/../
-
-curl -i -X GET -d rpc='{"method":"count","params":{"jobnum":"07-048"}}' http://127.0.0.1:3001/../
 
 # List jobs by their status
 curl -i -X GET -d rpc='{"method":"list_job_status","params":{"status":"2"}}' http://127.0.0.1:3001/../
 
-# Update job by status
-curl -i -X GET -d rpc='{"method":"update_job_status","params":{"status":"6", "pid": "P2003082747444015217"}}' http://127.0.0.1:3001/../
-
-# Clear job status
-curl -i -X GET -d rpc='{"method":"clear_job_status","params":{"pid": "P2003082747444015217"}}' http://127.0.0.1:3001/../
-
 # Create a job
 curl -i -X POST -d rpc='{"method":"create_job","params":{"jobnum": "15-555", "client": "jeff", "status":"2"}}' http://scorpio.local:3001/../
 
-# Create a job
+# Delete a job
 curl -i -X POST -d rpc='{"method":"delete_job","params":{"pid": 6}}' http://scorpio.local:3001/../
 
 ```
