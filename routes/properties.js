@@ -23,6 +23,8 @@ router.post('/properties/list_pr/', function(req, res){
       // res.render('properties', { pr_rows: output.result } );
     }
   });
+
+  handle.close_connection();
 });
 
 router.delete('/properties/destroy/:property_id', function(req, res) {
@@ -38,6 +40,8 @@ router.delete('/properties/destroy/:property_id', function(req, res) {
       // res.render('properties', { pr_rows: output.result } );
     }
   });
+
+  handle.close_connection();
 });
 
 router.post('/properties/list_job_status/', function(req, res){
@@ -55,6 +59,8 @@ router.post('/properties/list_job_status/', function(req, res){
       // res.render('properties', { pr_rows: output.result } );
     }
   });
+
+  handle.close_connection();
 });
 
 router.post('/properties/update_pr/', function(req, res){
@@ -72,6 +78,8 @@ router.post('/properties/update_pr/', function(req, res){
       // res.render('properties', { pr_rows: output.result } );
     }
   });
+
+  handle.close_connection();
 });
 
 router.post('/properties/create_job/', function(req, res){
@@ -89,6 +97,8 @@ router.post('/properties/create_job/', function(req, res){
       // res.render('properties', { pr_rows: output.result } );
     }
   });
+
+  handle.close_connection();
 });
 
 // NOTE(jeff): HTTP routes
