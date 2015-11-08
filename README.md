@@ -8,7 +8,11 @@ curl -i -X POST -d rpc='{"method":"update_pr","params":{"pid":"P2006121549330062
 # NULL check
 curl -i -X GET -d rpc='{"method":"list_pr","params":{}}' http://127.0.0.1:3001/../
 
-curl -i -X GET -d rpc='{"method":"list_pr","params":{"jobnum":"07-048"}}' http://127.0.0.1:3001/../
+# List all jobs
+curl -i -X POST -d rpc='{"method":"list_pr","params":null}' http://scorpio.local:3000/api/properties/list_pr
+
+# List specific job
+curl -i -X POST -d rpc='{"method":"list_pr","params":{"pid":"1"}}' http://scorpio.local:3000/api/properties/list_pr
 
 # NULL check
 curl -i -X GET -d rpc='{"method":"list_co","params":{}}' http://127.0.0.1:3001/../

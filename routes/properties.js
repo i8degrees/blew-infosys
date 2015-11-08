@@ -13,7 +13,7 @@ router.post('/properties/list_pr/', function(req, res){
   var params = req.query;
 
   // NOTE(jeff): Initialize our database link
-  handle.create_connection();
+  // handle.create_connection();
 
   rpcJs.input({
     input: { method: 'list_pr', params: params },
@@ -24,13 +24,13 @@ router.post('/properties/list_pr/', function(req, res){
     }
   });
 
-  handle.close_connection();
+  // handle.close_connection();
 });
 
 router.delete('/properties/destroy/:property_id', function(req, res) {
 
   // NOTE(jeff): Initialize our database link
-  handle.create_connection();
+  // handle.create_connection();
 
   rpcJs.input({
     input: { method: 'delete_job', params: { pid: req.params.property_id } },
@@ -41,7 +41,7 @@ router.delete('/properties/destroy/:property_id', function(req, res) {
     }
   });
 
-  handle.close_connection();
+  // handle.close_connection();
 });
 
 router.post('/properties/list_job_status/', function(req, res){
@@ -49,7 +49,7 @@ router.post('/properties/list_job_status/', function(req, res){
   var params = req.query;
 
   // NOTE(jeff): Initialize our database link
-  handle.create_connection();
+  // handle.create_connection();
 
   rpcJs.input({
     input: { method: 'list_job_status', params: params },
@@ -60,7 +60,7 @@ router.post('/properties/list_job_status/', function(req, res){
     }
   });
 
-  handle.close_connection();
+  // handle.close_connection();
 });
 
 router.post('/properties/update_pr/', function(req, res){
@@ -68,7 +68,7 @@ router.post('/properties/update_pr/', function(req, res){
   var params = req.query;
 
   // NOTE(jeff): Initialize our database link
-  handle.create_connection();
+  // handle.create_connection();
 
   rpcJs.input({
     input: { method: 'update_pr', params: params },
@@ -79,7 +79,7 @@ router.post('/properties/update_pr/', function(req, res){
     }
   });
 
-  handle.close_connection();
+  // handle.close_connection();
 });
 
 router.post('/properties/create_job/', function(req, res){
@@ -87,7 +87,7 @@ router.post('/properties/create_job/', function(req, res){
   var params = req.query;
 
   // NOTE(jeff): Initialize our database link
-  handle.create_connection();
+  // handle.create_connection();
 
   rpcJs.input({
     input: { method: 'create_job', params: params },
@@ -98,7 +98,7 @@ router.post('/properties/create_job/', function(req, res){
     }
   });
 
-  handle.close_connection();
+  // handle.close_connection();
 });
 
 // NOTE(jeff): HTTP routes
