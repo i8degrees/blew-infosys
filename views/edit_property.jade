@@ -34,63 +34,36 @@ block content
 
   form(action=locals.loc.pathname, method='POST', novalidate)
 
-    //- +text_field("cid", property.ClientKey)
-    +print_field("CID: ", property.ClientKey)
-    +print_field("PID: ", property.PropertyKey)
-    +print_field("PID: ", property.property_id)
-
-    //- +text_field("jobnum", property.JobNum)
-    +print_field("jobnum", property.JobNum)
-
-    //- +text_field("contact", property.JobContact)
-    +print_field("Contact: ", property.JobContact)
-    +print_field("Address: ", property.JobAddress)
-    +print_field("Email: ", property.JobEmail)
-    +print_field("Requested by: ", property.JobRequestedBy)
-
-    +print_field("Name: ", property.Property)
-    //- +text_field("name", property.Property)
-
-    +print_field("Location: ", property.Location)
-    +print_field("County: ", property.County)
-    +print_field("District: ", property.District)
-    +print_field("Section, Township & Range: ", property.SecTwpRge)
-    +print_field("Description: ", property.JobDescription)
-    +print_field("Subdivision: ", property.Subdivision)
-    +print_field("Lot: ", property.Lot)
-    +print_field("Lot: ", property.LandLot)
-    +print_field("Block: ", property.Block)
-    +print_field("Area: ", property.Area)
-    +print_field("Filed: ", property.WhereFiled)
-    +print_field("Book: ", property.PlatBook)
-    +print_field("Page: ", property.PlatPage)
-    +print_field("TaxMap: ", property.TaxMap)
-    +print_field("Improvements: ", property.Improvements)
-    +print_field("Zoning: ", property.Zoning)
-    +print_field("Notes: ", property.Notes)
-    +print_field("Notes: ", property.JobNotes)
+    //- +text_field("cid", job.ClientKey)
+    +print_field("PID: ", job.PropertyKey)
+    +print_field("PID: ", job.property_id)
+    +print_field("jobnum", job.JobNum)
+    +print_field("Contact: ", job.JobContact)
+    //- +print_field("Email: ", job.JobEmail)
+    //- +print_field("Requested by: ", job.JobRequestedBy)
+    +print_field("Notes: ", job.Notes)
+    +print_field("Notes: ", job.JobNotes)
 
     label(for='property_jobstatus') Job Status:
 
-    if property.JobStatus != null
-      if property.JobStatus == 1
+    if job.JobStatus != null
+      if job.JobStatus == 1
         b Ordered
-      if property.JobStatus == 2
+      if job.JobStatus == 2
         b In the field
-      else if property.JobStatus == 3
+      else if job.JobStatus == 3
         b In drafting
-      else if property.JobStatus == 4
+      else if job.JobStatus == 4
         b Needs Review
-      else if property.JobStatus == 5
+      else if job.JobStatus == 5
         b In Revision
-      else if property.JobStatus == 6
+      else if job.JobStatus == 6
         b Completed
       br
     else
       b Not assigned
     br
     select(id='property_jobstatus', name='status')
-      +select_option('Select status', status)
       +select_option('Ordered', status)
       +select_option('In the Field', status)
       +select_option('In drafting', status)
@@ -98,14 +71,14 @@ block content
       +select_option('Revisions', status)
       +select_option('Completed', status)
 
-    +print_field("Need by date: ", property.JobDateNeeded)
-    +print_field("Assigned to: ", property.JobAssignedTo)
+    +print_field("Need by date: ", job.JobDateNeeded)
+    //- +print_field("Assigned to: ", job.JobAssignedTo)
 
-    +print_field("Assigned: ", property.User1, property.User2, property.User3,
-    property.User4, property.User5, property.User6, property.User7, property.User8)
-    +print_field("Created: ", property.DateCreated)
-    +print_field("Edited: ", property.DateEdited)
+    +print_field("Created: ", job.DateCreated)
+    +print_field("Edited: ", job.DateEdited)
 
     button(type='submit', name='action', value='update_property') Update Property
-  hr
 
+  // TODO: Validate!
+  a(href='/jobs/destroy/' + job.PropertyKey) destroy
+  //- &#32;-&#32;

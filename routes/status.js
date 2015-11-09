@@ -4,7 +4,7 @@ var router = express.Router();
 var rpc = require('rpc.js');
 var rpcJs = rpc.gateway( { schema: require('../lib/api') } );
 
-router.get('/status', function(req, res) {
+router.get('/', function(req, res) {
 
   var job_number = req.query['jobnum'];
   var pid = req.query['pid'];
@@ -50,7 +50,7 @@ router.get('/status', function(req, res) {
   });
 });
 
-router.get('/status/ordered', function(req, res) {
+router.get('/ordered', function(req, res) {
 
   rpcJs.input({
     input: { method: 'list_job_status', params: { status: "1" } },
@@ -81,7 +81,7 @@ router.get('/status/ordered', function(req, res) {
 
 });
 
-router.get('/status/field', function(req, res) {
+router.get('/field', function(req, res) {
 
   rpcJs.input({
     input: { method: 'list_job_status', params: { status: "2" } },
@@ -112,7 +112,7 @@ router.get('/status/field', function(req, res) {
 
 });
 
-router.get('/status/drafting', function(req, res) {
+router.get('/drafting', function(req, res) {
 
   rpcJs.input({
     input: { method: 'list_job_status', params: { status: "3" } },
@@ -143,7 +143,7 @@ router.get('/status/drafting', function(req, res) {
 
 });
 
-router.get('/status/review', function(req, res) {
+router.get('/review', function(req, res) {
 
   rpcJs.input({
     input: { method: 'list_job_status', params: { status: "4" } },
@@ -174,7 +174,7 @@ router.get('/status/review', function(req, res) {
 
 });
 
-router.get('/status/completed', function(req, res) {
+router.get('/completed', function(req, res) {
 
   rpcJs.input({
     input: { method: 'list_job_status', params: { status: "6" } },

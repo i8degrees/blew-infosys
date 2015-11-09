@@ -15,28 +15,28 @@ block content
     h2 Ordered jobs:
     each job in ordered_jobs
       p
-        a(href="/api/properties/#{job.PropertyKey}")= job.JobNum
+        a(href="/jobs/#{job.PropertyKey}")= job.JobNum
 
   if field_jobs != null && field_jobs.length > 0
     h2 Jobs in the field:
     each job in field_jobs
       p
-        a(href="/api/properties/#{job.PropertyKey}")= job.JobNum
+        a(href="/jobs/#{job.PropertyKey}")= job.JobNum
 
   if drafting_jobs != null && drafting_jobs.length > 0
     h2 Jobs in drafting:
     each job in drafting_jobs
       p
-        a(href="/api/properties/#{job.PropertyKey}")= job.JobNum
+        a(href="/jobs/#{job.PropertyKey}")= job.JobNum
 
   if review_jobs != null && review_jobs.length > 0
     h2 Jobs up for review:
     each job in review_jobs
       p
-        a(href="/api/properties/#{job.PropertyKey}")= job.JobNum
+        a(href="/jobs/#{job.PropertyKey}")= job.JobNum
 
   if completed_jobs != null && completed_jobs.length > 0
     h2 Completed jobs:
     each job in completed_jobs
       p
-        a(href="/api/properties/#{job.PropertyKey}")= job.JobNum
+        a(href="/jobs/#{job.PropertyKey}")= job.JobNum

@@ -17,31 +17,29 @@ block content
 
   h2 Jobs
 
-  if pr_rows.length > 0
-    p Results: #{pr_rows.length}
-    each property in pr_rows
+  if results.length > 0
+    p Results: #{results.length}
+    each job in results
 
-      +print_field("PID: ", property.PropertyKey)
-
-      +print_field("Job number: ", property.JobNum)
-      +print_field("Contact: ", property.JobContact)
-      +print_field("Requested by: ", property.JobRequestedBy)
-      +print_field("Name: ", property.Property)
-      +print_field("Notes: ", property.Notes)
-      +print_field("Notes: ", property.JobNotes)
+      +print_field("job_id: ", job.PropertyKey)
+      +print_field("Job number: ", job.JobNum)
+      +print_field("Contact: ", job.JobContact)
+      //- +print_field("Requested by: ", job.JobRequestedBy)
+      +print_field("Notes: ", job.Notes)
+      +print_field("Notes: ", job.JobNotes)
 
       - var status_str = '';
-      if property.JobStatus == 1
+      if job.JobStatus == 1
         - status_str = "Ordered";
-      if property.JobStatus == 2
+      if job.JobStatus == 2
         - status_str = "In the field";
-      else if property.JobStatus == 3
+      else if job.JobStatus == 3
         - status_str = "In drafting";
-      else if property.JobStatus == 4
+      else if job.JobStatus == 4
         - status_str = "Needs Review";
-      else if property.JobStatus == 5
+      else if job.JobStatus == 5
         - status_str = "In Revision";
-      else if property.JobStatus == 6
+      else if job.JobStatus == 6
         - status_str = "Completed";
       else
         //- NOTE(jeff): NULL values
@@ -49,18 +47,14 @@ block content
       p Job Status:
         b #{status_str}
 
-      +print_field("Due date: ", property.JobDateNeeded)
-      //- +print_field("Assigned to: ", property.JobAssignedTo)
-
-      //- +print_field("Assigned: ", property.User1, property.User2, property.User3,
-      //- property.User4, property.User5, property.User6, property.User7, property.User8)
-      +print_field("Created: ", property.DateCreated)
-      +print_field("Edited: ", property.DateEdited)
+      +print_field("Due date: ", job.JobDateNeeded)
+      +print_field("Created: ", job.DateCreated)
+      +print_field("Edited: ", job.DateEdited)
 
       hr
       // TODO: Validate!
-      a(href='/api/properties/' + property.PropertyKey) edit
+      a(href='/jobs/' + job.PropertyKey) edit
       &#32;-&#32;
-      a(href='/api/properties/destroy/' + property.PropertyKey) destroy
+      a(href='/jobs/destroy' + job.PropertyKey) destroy
 
       hr

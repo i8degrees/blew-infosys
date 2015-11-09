@@ -29,13 +29,12 @@ block content
     input(type="text" id='job_client' name="client" required)
     br
     br
-    label(for='date') Need by date:
+    label(for='date') Due date:
     input(type="text" id='date' name="due_date")
     br
     br
     label(for='job_status') Job Status:
     select(id='job_status', name='status')
-      +select_option('Select status', status)
       +select_option('Ordered', status)
       +select_option('In the Field', status)
       +select_option('In drafting', status)

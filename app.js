@@ -18,9 +18,10 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var index = require('./routes/index');
 var contacts_api = require('./routes/contacts');
-var properties_api = require('./routes/properties');
+var jobs = require('./routes/properties');
+var jobs_api = require('./routes/api');
 // var users_api = require('./routes/users');
-var status_api = require('./routes/status');
+var status = require('./routes/status');
 
 var cors = require('cors');
 
@@ -95,11 +96,14 @@ app.use( function(req, res, next) {
 // IMPORTANT(jeff): Enable COR; Cross-Origin Request
 app.use( cors() );
 
+// TODO(jeff): Use this
+// app.use('/properties', properties);
 app.use('/', index);
-app.use('/api', contacts_api);
-app.use('/api', properties_api);
+app.use('/jobs', jobs);
+app.use('/status', status);
 // app.use('/users', users_api);
-app.use('/api', status_api);
+app.use('/api', jobs_api);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

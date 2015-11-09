@@ -5,35 +5,20 @@
 
 curl -i -X POST -d rpc='{"method":"update_pr","params":{"pid":"P2006121549330062039","jobnum":"","status":"1"}}' http://localhost:3001/../
 
-# NULL check
-curl -i -X GET -d rpc='{"method":"list_pr","params":{}}' http://127.0.0.1:3001/../
-
 # List all jobs
-curl -i -X POST -d rpc='{"method":"list_pr","params":null}' http://scorpio.local:3000/api/properties/list_pr
+curl -i -X POST -d rpc='{"method":"list_pr","params":{}}' http://localhost:3000/api/jobs/list
 
 # List specific job
-curl -i -X POST -d rpc='{"method":"list_pr","params":{"pid":"1"}}' http://scorpio.local:3000/api/properties/list_pr
-
-# NULL check
-curl -i -X GET -d rpc='{"method":"list_co","params":{}}' http://127.0.0.1:3001/../
-
-# Dump rows that have *Jeff* in the contact field
-curl -i -X GET -d rpc='{"method":"list_co","params":{"cname":"Jeff"}}' http://127.0.0.1:3001/../
-
-# Dump rows that have the number 2006 in the client key
-curl -i -X GET -d rpc='{"method":"list_co","params":{"cid":"2006"}}' http://127.0.0.1:3001/../
-
-# List contacts
-curl -i -X GET -d rpc='{"method":"list_co","params":{ "cid": 2006, "cname": "Jeff"}}' http://127.0.0.1:3001/../
+curl -i -X POST -d rpc='{"method":"list_pr","params":{"pid":"1"}}' http://localhost:3000/jobs/list
 
 # List jobs by their status
-curl -i -X GET -d rpc='{"method":"list_job_status","params":{"status":"2"}}' http://127.0.0.1:3001/../
+curl -i -X POST -d rpc='{"method":"list_job_status","params":{"status":"2"}}' http://localhost:3000/api/jobs/list_job_status
 
 # Create a job
-curl -i -X POST -d rpc='{"method":"create_job","params":{"jobnum": "15-555", "client": "jeff", "status":"2"}}' http://scorpio.local:3001/../
+curl -i -X POST -d rpc='{"method":"create_job","params":{"jobnum": "15-555", "client": "jeff", "status":"2"}}' http://localhost:3000/api/jobs/create
 
 # Delete a job
-curl -i -X POST -d rpc='{"method":"delete_job","params":{"pid": 6}}' http://scorpio.local:3001/../
+curl -i -X DELETE -d rpc='{"method":"delete_job","params":{"pid": 6}}' http://localhost:3000/api/jobs/destroy
 
 ```
 
