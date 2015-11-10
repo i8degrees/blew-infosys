@@ -78,7 +78,7 @@ router.get('/', function(req, res) {
     callback: function(output) {
 
       var result = output.result;
-      res.render('properties', { results: result } );
+      res.render('jobs', { results: result } );
     }
   });
 
@@ -90,7 +90,7 @@ router.get('/:job_id', function(req, res) {
   rpcJs.input({
     input: { method: 'list_pr', params: { pid: req.params.job_id } },
     callback: function(output) {
-      res.render('edit_property', { job: output.result[0] } );
+      res.render('edit_job', { job: output.result[0] } );
     }
   });
 
@@ -106,7 +106,7 @@ router.post('/:job_id', function(req, res) {
 
   // TODO: Validate user input!
   if(res.locals.property.action) {
-    console.log("update property");
+    console.log("update job");
 
     var job_status = 0;
     if(res.locals.property.status == "Ordered") {

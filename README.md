@@ -3,22 +3,23 @@
 ```console
 # TODO: Test passing of NULL params on everything
 
-curl -i -X POST -d rpc='{"method":"update_pr","params":{"pid":"P2006121549330062039","jobnum":"","status":"1"}}' http://localhost:3001/../
-
 # List all jobs
-curl -i -X POST -d rpc='{"method":"list_pr","params":{}}' http://localhost:3000/api/jobs/list
+curl -i -X GET -d rpc='{"method":"list_pr","params":{}}' http://localhost:3000/api/jobs
 
 # List specific job
-curl -i -X POST -d rpc='{"method":"list_pr","params":{"pid":"1"}}' http://localhost:3000/jobs/list
+curl -i -X GET -d rpc='{"method":"list_pr","params":{"pid":"1"}}' http://localhost:3000/api/jobs
 
 # List jobs by their status
-curl -i -X POST -d rpc='{"method":"list_job_status","params":{"status":"2"}}' http://localhost:3000/api/jobs/list_job_status
+curl -i -X GET -d rpc='{"method":"list_job_status","params":{"status":"2"}}' http://localhost:3000/api/jobs/list_status
 
 # Create a job
-curl -i -X POST -d rpc='{"method":"create_job","params":{"jobnum": "15-555", "client": "jeff", "status":"2"}}' http://localhost:3000/api/jobs/create
+curl -i -X POST -d rpc='{"method":"create_job","params":{"jobnum": "15-555", "client": "jeff", "status":"2"}}' http://localhost:3000/api/jobs
+
+# Update job
+curl -i -X PUT -d rpc='{"method":"update_pr","params":{"pid":"5","jobnum":"15-601","status":"1"}}' http://localhost:3000/api/jobs
 
 # Delete a job
-curl -i -X DELETE -d rpc='{"method":"delete_job","params":{"pid": 6}}' http://localhost:3000/api/jobs/destroy
+curl -i -X DELETE -d rpc='{"method":"delete_job","params":{"pid": 6}}' http://localhost:3000/api/jobs
 
 ```
 

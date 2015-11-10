@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-var db_handle = require('../lib/db');
+// var db_handle = require('../lib/db');
 var rpc = require('rpc.js');
 var rpcJs = rpc.gateway( { schema: require('../lib/api') } );
 
@@ -22,7 +22,7 @@ output_fail = function(res, err) {
 // order (string) -- ORDER BY [field] SQL clause
 // sort (string) -- ASC or DESC SQL clause,
 // limit (number) -- LIMIT [num] SQL clause
-router.post('/jobs/list', function(req, res) {
+router.get('/jobs', function(req, res) {
 
   var rpc = JSON.parse(req.body.rpc);
   var params = rpc.params;
@@ -35,22 +35,7 @@ router.post('/jobs/list', function(req, res) {
   });
 });
 
-// pid (number) REQUIRED -- ID of job
-router.delete('/jobs/destroy', function(req, res) {
-
-  var rpc = JSON.parse(req.body.rpc);
-  var params = rpc.params;
-
-  rpcJs.input({
-    input: { method: 'delete_job', params: params },
-    callback: function(output) {
-      output_result(res, output);
-    }
-  });
-
-});
-
-router.post('/jobs/list_status', function(req, res){
+router.get('/jobs/list_status', function(req, res){
 
   var rpc = JSON.parse(req.body.rpc);
   var params = rpc.params;
@@ -63,7 +48,7 @@ router.post('/jobs/list_status', function(req, res){
   });
 });
 
-router.post('/jobs/update', function(req, res){
+router.put('/jobs', function(req, res){
 
   var rpc = JSON.parse(req.body.rpc);
   var params = rpc.params;
@@ -81,7 +66,7 @@ router.post('/jobs/update', function(req, res){
 // status (number) -- Job status
 // due_date (number) -- Need by date
 // notes (string) -- Job notes
-router.post('/jobs/create', function(req, res){
+router.post('/jobs', function(req, res){
 
   var rpc = JSON.parse(req.body.rpc);
   var params = rpc.params;
@@ -92,6 +77,21 @@ router.post('/jobs/create', function(req, res){
       output_result(res, output);
     }
   });
+});
+
+// pid (number) REQUIRED -- ID of job
+router.delete('/jobs', function(req, res) {
+
+  var rpc = JSON.parse(req.body.rpc);
+  var params = rpc.params;
+
+  rpcJs.input({
+    input: { method: 'delete_job', params: params },
+    callback: function(output) {
+      output_result(res, output);
+    }
+  });
+
 });
 
 module.exports = router;

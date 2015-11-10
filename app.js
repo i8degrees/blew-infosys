@@ -18,7 +18,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var index = require('./routes/index');
 var contacts_api = require('./routes/contacts');
-var jobs = require('./routes/properties');
+var jobs = require('./routes/jobs');
 var jobs_api = require('./routes/api');
 // var users_api = require('./routes/users');
 var status = require('./routes/status');
@@ -84,7 +84,6 @@ app.use( function(req, res, next) {
   // page without first checking if the req.body.<field> object exists.
   //
   // See also: http://dailyjs.com/2012/09/13/express-3-csrf-tutorial/
-  res.locals.property = {};
   res.locals.job = {};
 
   // Page tracking (href, query, pathname)
@@ -96,8 +95,6 @@ app.use( function(req, res, next) {
 // IMPORTANT(jeff): Enable COR; Cross-Origin Request
 app.use( cors() );
 
-// TODO(jeff): Use this
-// app.use('/properties', properties);
 app.use('/', index);
 app.use('/jobs', jobs);
 app.use('/status', status);
