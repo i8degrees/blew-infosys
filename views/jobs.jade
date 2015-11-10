@@ -22,28 +22,26 @@ block content
     each job in results
 
       +print_field("job_id: ", job.PropertyKey)
-      +print_field("Job number: ", job.JobNum)
-      +print_field("Contact: ", job.JobContact)
-      //- +print_field("Requested by: ", job.JobRequestedBy)
+      +print_field("Client: ", job.JobContact)
+      +print_field("Job Number: ", job.JobNum)
+      +print_field("Address: ", job.JobAddress)
+      +print_field("City: ", job.JobCity)
       +print_field("Notes: ", job.Notes)
       +print_field("Notes: ", job.JobNotes)
 
+      //- FIXME(jeff): Find a better way of doing this that is **outside** of
+      //- the Jade template.
       - var status_str = '';
-      if job.JobStatus == 1
-        - status_str = "Ordered";
-      if job.JobStatus == 2
-        - status_str = "In the field";
-      else if job.JobStatus == 3
-        - status_str = "In drafting";
-      else if job.JobStatus == 4
-        - status_str = "Needs Review";
-      else if job.JobStatus == 5
-        - status_str = "In Revision";
-      else if job.JobStatus == 6
-        - status_str = "Completed";
-      else
-        //- NOTE(jeff): NULL values
+      if job.JobStatus == 0
         - status_str = "Not assigned";
+      else if job.JobStatus == 1
+        - status_str = "Fieldwork";
+      if job.JobStatus == 2
+        - status_str = "Drafting";
+      else if job.JobStatus == 3
+        - status_str = "Review";
+      else if job.JobStatus == 4
+        - status_str = "Completed";
       p Job Status:
         b #{status_str}
 

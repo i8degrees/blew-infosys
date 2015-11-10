@@ -22,30 +22,39 @@ block content
   form(action=locals.loc.pathname, method='POST')
 
     br
-    label(for='job_number') Job Number:
-    input(type="text" id='job_number' name="jobnum" required)
-    br
     label(for='job_client') Client Name:
     input(type="text" id='job_client' name="client" required)
+    br
+    br
+    label(for='job_number') Job Number:
+    input(type="text" id='job_number' name="jobnum" required)
     br
     br
     label(for='date') Due date:
     input(type="text" id='date' name="due_date")
     br
     br
+    label(for='addr') Address:
+    input(type="text" id='addr' name="address")
+    br
+    br
+    label(for='city') City:
+    input(type="text" id='city' name="city")
+    br
+    br
     label(for='job_status') Job Status:
-    select(id='job_status', name='status')
-      +select_option('Ordered', status)
-      +select_option('In the Field', status)
-      +select_option('In drafting', status)
-      +select_option('Needs Review', status)
-      +select_option('Revisions', status)
-      +select_option('Completed', status)
-      //- TODO(jeff): Consolidate down to,
-      //- +select_option('Fieldwork', status)
-      //- +select_option('Drafting', status)
-      //- +select_option('Review', status)
-      //- +select_option('Completed', status)
+    br
+    input(type="radio" name="status" value="1")
+    label(for='job_status_1') Fieldwork
+
+    input(type="radio" name="status" value="2")
+    label(for='job_status_2') Drafting
+
+    input(type="radio" name="status" value="3")
+    label(for='job_status_3') Review
+    input(type="radio" name="status" value="4")
+    label(for='job_status_4') Completed
+    br
     br
     br
     div(class='label')

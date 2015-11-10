@@ -6,6 +6,32 @@ var rpc = require('rpc.js');
 var rpcJs = rpc.gateway( { schema: require('../lib/api') } );
 // var assert = require('assert');
 
+var JobStatus = {
+  NULL: 0,
+  FIELDWORK: 1,
+  DRAFTING: 2,
+  REVIEW: 3,
+  COMPLETED: 4,
+
+  str: function(id) {
+    var result = '';
+
+    if(id == JobStatus.NULL) {
+      result = "Not assigned";
+    } else if(id == JobStatus.FIELDWORK) {
+      result = "Fieldwork";
+    } else if(id == JobStatus.DRAFTING) {
+      result = "Drafting";
+    } else if(id == JobStatus.REVIEW) {
+      result = "Review";
+    } else if(id == JobStatus.COMPLETED) {
+      result = "Completed";
+    }
+
+    return result;
+  }
+};
+
 // NOTE(jeff): HTTP routes
 
 // GET job creation
@@ -26,27 +52,18 @@ router.post('/create', function(req, res) {
     // TODO: Validate user input!
     var job_number = res.locals.job.jobnum;
     var client_name = res.locals.job.client;
-    var job_status = 0;
+    var job_status = JobStatus.STATUS_NULL;
     var job_notes = res.locals.job.notes;
     var due_date = res.locals.job.due_date;
+    var addr = res.locals.job.address;
+    var city = res.locals.job.city;
 
     console.log("create job");
 
-    if(res.locals.job.status == "Ordered") {
-      job_status = 1;
-    } else if(res.locals.job.status == "In the Field") {
-      job_status = 2;
-    } else if(res.locals.job.status == "In drafting") {
-      job_status = 3;
-    } else if(res.locals.job.status == "Needs Review") {
-      job_status = 4;
-    } else if(res.locals.job.status == "Revisions") {
-      job_status = 5;
-    } else if(res.locals.job.status == "Completed") {
-      job_status = 6;
-    } else {
-      // FIXME
-      job_status = 0;
+    if(res.locals.job.status >= JobStatus.NULL &&
+       res.locals.job.status <= JobStatus.COMPLETED)
+    {
+      job_status = res.locals.job.status;
     }
 
     var params = {
@@ -54,7 +71,9 @@ router.post('/create', function(req, res) {
       client: client_name,
       status: job_status,
       notes: job_notes,
-      due_date: due_date
+      due_date: due_date,
+      address: addr,
+      city: city
     };
 
     rpcJs.input({
@@ -102,28 +121,18 @@ router.post('/:job_id', function(req, res) {
   var pid = req.params.job_id;
 
   // Store the state of the HTTP request body (form data)
-  res.locals.property = req.body;
+  res.locals.job = req.body;
 
   // TODO: Validate user input!
-  if(res.locals.property.action) {
+  if(res.locals.job.action) {
     console.log("update job");
 
-    var job_status = 0;
-    if(res.locals.property.status == "Ordered") {
-      job_status = 1;
-    } else if(res.locals.property.status == "In the Field") {
-      job_status = 2;
-    } else if(res.locals.property.status == "In drafting") {
-      job_status = 3;
-    } else if(res.locals.property.status == "Needs Review") {
-      job_status = 4;
-    } else if(res.locals.property.status == "Revisions") {
-      job_status = 5;
-    } else if(res.locals.property.status == "Completed") {
-      job_status = 6;
-    } else {
-      // FIXME
-      job_status = 0;
+    var job_status = JobStatus.STATUS_NULL;
+
+    if(res.locals.job.status >= JobStatus.NULL &&
+       res.locals.job.status <= JobStatus.COMPLETED)
+    {
+      job_status = res.locals.job.status;
     }
 
     rpcJs.input({

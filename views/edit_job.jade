@@ -44,32 +44,33 @@ block content
     +print_field("Notes: ", job.Notes)
     +print_field("Notes: ", job.JobNotes)
 
-    label(for='property_jobstatus') Job Status:
-
+    label(for='job_status') Job Status:
+    br
     if job.JobStatus != null
       if job.JobStatus == 1
-        b Ordered
+        b Fieldwork
       if job.JobStatus == 2
-        b In the field
+        b Drafting
       else if job.JobStatus == 3
-        b In drafting
+        b Review
       else if job.JobStatus == 4
-        b Needs Review
-      else if job.JobStatus == 5
-        b In Revision
-      else if job.JobStatus == 6
         b Completed
       br
     else
       b Not assigned
     br
-    select(id='property_jobstatus', name='status')
-      +select_option('Ordered', status)
-      +select_option('In the Field', status)
-      +select_option('In drafting', status)
-      +select_option('Needs Review', status)
-      +select_option('Revisions', status)
-      +select_option('Completed', status)
+    input(type="radio" name="status" value="1")
+    label(for='job_status_1') Fieldwork
+
+    input(type="radio" name="status" value="2")
+    label(for='job_status_2') Drafting
+
+    input(type="radio" name="status" value="3")
+    label(for='job_status_3') Review
+    input(type="radio" name="status" value="4")
+    label(for='job_status_4') Completed
+    br
+    br
 
     +print_field("Need by date: ", job.JobDateNeeded)
     //- +print_field("Assigned to: ", job.JobAssignedTo)

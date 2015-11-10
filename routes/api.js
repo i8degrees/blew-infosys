@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-// var db_handle = require('../lib/db');
+var db_handle = require('../lib/db');
 var rpc = require('rpc.js');
 var rpcJs = rpc.gateway( { schema: require('../lib/api') } );
 
