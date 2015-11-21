@@ -95,7 +95,7 @@ app.use( function(req, res, next) {
     // forms: form_helpers
   },
 
-  res.locals.query = {};
+  res.locals.query = '';
 
   next();
 });

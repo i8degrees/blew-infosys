@@ -49,6 +49,18 @@ curl -i -X PUT -d rpc='{"method":"update_pr","params":{"pid":"5","jobnum":"15-60
 # Delete a job
 curl -i -X DELETE -d rpc='{"method":"delete_job","params":{"pid": 6}}' http://localhost:3000/api/jobs
 
+# Search jobs
+curl -i -X GET -d rpc='{"method":"search","params":{ "query": "devilman"}}' http://localhost:3000/api/search
+
+# Search jobs; test FULLTEXT AND, NOT operator
+curl -i -X GET -d rpc='{"method":"search","params":{ "query": "-devilman +square"}}' http://localhost:3000/api/search
+
+# Search jobs; test wildcard operator
+curl -i -X GET -d rpc='{"method":"search","params":{ "query": "dev*"}}' http://localhost:3000/api/search
+
+# TODO: test FULLTEXT AND operator
+# TODO: test FULLTEXT OR operator
+
 ```
 
 ## TODO

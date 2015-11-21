@@ -13,33 +13,28 @@ block content
       window.history.back();
     }
 
-  a(href="" onclick="go_back()") Go Back
-
   h2 Jobs
+  a(href="" onclick="go_back()") Go Back
   p Results: #{results.length}
 
   if results.length > 0
     each job in results
 
-      +print_field("job_id: ", job.PropertyKey)
       +print_field("Client: ", job.JobContact)
       +print_field("Job Number: ", job.JobNum)
       +print_field("Address: ", job.JobAddress)
       +print_field("Notes: ", job.JobNotes)
-
+      +print_field("Due date: ", job.JobDateNeeded)
       p Job Status:
         b #{job.JobStatus}
 
-      +print_field("Due date: ", job.JobDateNeeded)
-      +print_field("Created: ", job.DateCreated)
-      +print_field("Edited: ", job.DateEdited)
-
-      hr
-      // TODO: Validate!
+      //- TODO: Validate!
       if job.PropertyKey != null
-        a(href='/jobs/' + job.PropertyKey) edit
+        a(href='/jobs/' + job.PropertyKey) [edit]
+        | &#32;-&#32;
 
-      | &#32;-&#32;
-      a(href='/jobs/destroy' + job.PropertyKey) destroy
+      //- TODO: Validate!
+      if job.PropertyKey != null
+        a(href='/jobs/destroy' + job.PropertyKey) [destroy]
 
       hr

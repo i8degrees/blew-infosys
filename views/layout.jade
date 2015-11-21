@@ -21,6 +21,12 @@ html
     document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')
 
   body
+    //- script.
+      function go_back() {
+        window.history.back();
+      }
+    //- a(href="" onclick="go_back()") Go Back
+
     h1= locals.settings.site_owner['company']
     a(href="/") Home
     | &#32;-&#32;
@@ -29,9 +35,15 @@ html
     a(href="/jobs/") View Jobs
     | &#32;-&#32;
     a(href="/status") Job Status
-    | &#32;-&#32;
-    a(href="/jobs/search") Job Search
     br
     br
+
+    div(class='align-text-center')
+      form(id='cse-search-box-form-id', action='/jobs', method='GET')
+        //- NOTE: Safari overrides our styling when the input field type is set to
+        //- 'search'.
+        input(id='cse-search-input-box', class='search_input', type='text', name='q', spellcheck=false, autocomplete='off', value= locals.query, placeholder='Search by contact, number or address...', tabindex=1)
+        //- br
+        button(type='submit', class='search_button')
 
     block content

@@ -87,12 +87,7 @@ router.delete('/jobs', function(req, res) {
 
 });
 
-/*  SQL Query
-    SELECT * FROM IR_properties
-    WHERE MATCH (JobNum, JobNotes,JobContact) AGAINST
-    ('07-048 07-049 +boo -carp' IN BOOLEAN MODE);
-*/
-router.post('/search', function(req, res) {
+router.get('/search', function(req, res) {
 
   var rpc = JSON.parse(req.body.rpc);
   var params = rpc.params;

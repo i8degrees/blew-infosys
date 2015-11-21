@@ -23,13 +23,6 @@ mixin select_option(label, form_var)
   option(value= label, selected= form_var === label ? true : false)= label
 
 block content
-  script.
-    function go_back() {
-      window.history.back();
-    }
-
-  a(href="" onclick="go_back()") Go Back
-
   h2 Job
 
   form(action=locals.loc.pathname, method='POST', novalidate)
@@ -41,37 +34,31 @@ block content
     input(type="text" id='job_number' name="jobnum" required)
     br
     br
-    label(for='date') Due date
-    input(type="text" id='date' name="due_date")
-    br
-    br
     label(for='addr') Address
     input(type="text" id='addr' name="address")
     br
     br
+
     label(for='job_status') Job Status:
-    p #{locals.job.status}
+    select(name='status')
+      option(value='fieldwork') Fieldwork
+      option(value='drafting') Drafting
+      option(value='review') Review
+      option(value='completed') Completed
     br
-    input(type="radio" name="status" value="1")
-    label(for='job_status_1') Fieldwork
+    br
 
-    input(type="radio" name="status" value="2")
-    label(for='job_status_2') Drafting
+    label(for='date') Due date
+    input(type="text" id='date' name="due_date")
+    br
+    br
 
-    input(type="radio" name="status" value="3")
-    label(for='job_status_3') Review
-    input(type="radio" name="status" value="4")
-    label(for='job_status_4') Completed
-    br
-    br
     div(class='label')
       //- +check_err( locals.input_errs['job'].notes )
       label(for='job_notes') Notes:
       //- span(class='req') Required
     textarea(id='job_notes', name='notes', spellcheck='true', maxlength=4096)= job.JobNotes
     br
-
-    +print_field("Need by date: ", job.JobDateNeeded)
 
     +print_field("Created: ", job.DateCreated)
     +print_field("Edited: ", job.DateEdited)
