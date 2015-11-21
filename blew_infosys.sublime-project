@@ -3,7 +3,16 @@
     [
         {
             "path": ".",
-            "folder_exclude_patterns": [ "node_modules" ]
+            "folder_exclude_patterns": [
+                "node_modules",
+                "public/css",
+                "public/js",
+                "public/img"
+            ],
+
+            "file_exclude_patterns": [
+                "*.bck"
+            ]
         }
     ]
 }
