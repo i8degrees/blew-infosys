@@ -75,7 +75,7 @@ app.set('site_developer', site_developer);
 // Local site library configuration; **must** go before router!
 app.use( function(req, res, next) {
 
-  // TODO: Split contact_form specifics from this
+
   // res.locals.form_helpers = form_helpers;
 
   // Avoid ReferenceError by creating the container used by the form elements
@@ -88,6 +88,14 @@ app.use( function(req, res, next) {
 
   // Page tracking (href, query, pathname)
   res.locals.loc = req._parsedUrl;
+
+  res.locals.helpers = {
+
+    // TODO(jeff): Implement correspondence form helpers at lib/form_helpers.js
+    // forms: form_helpers
+  },
+
+  res.locals.query = {};
 
   next();
 });
@@ -132,20 +140,6 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
-
-// TODO(jeff): Relocate..?
-// var rpc = require('rpc.js');
-
-// NOTE(jeff): API Schema
-// var rpcJS = rpc.gateway( {schema: require('./lib/api.js')} );
-
-// TODO(jeff): Relocate..?
-// HTTP-RPC server for our API
-// rpc.server('http', {
-//   port: process.env.RPC_PORT || 3001,
-//   address: process.env.RPC_HOST || "localhost",
-//   gateway: rpcJS // API Schema
-// });
 
 if(app.get('env') === 'development') {
 

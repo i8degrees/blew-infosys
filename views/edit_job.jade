@@ -33,31 +33,24 @@ block content
   h2 Job
 
   form(action=locals.loc.pathname, method='POST', novalidate)
-
-    //- +text_field("cid", job.ClientKey)
-    +print_field("PID: ", job.PropertyKey)
-    +print_field("PID: ", job.property_id)
-    +print_field("jobnum", job.JobNum)
-    +print_field("Contact: ", job.JobContact)
-    //- +print_field("Email: ", job.JobEmail)
-    //- +print_field("Requested by: ", job.JobRequestedBy)
-    +print_field("Notes: ", job.Notes)
-    +print_field("Notes: ", job.JobNotes)
-
-    label(for='job_status') Job Status:
+    label(for='job_client') Client Contact
+    input(type="text" id='job_client' name="client" required)
     br
-    if job.JobStatus != null
-      if job.JobStatus == 1
-        b Fieldwork
-      if job.JobStatus == 2
-        b Drafting
-      else if job.JobStatus == 3
-        b Review
-      else if job.JobStatus == 4
-        b Completed
-      br
-    else
-      b Not assigned
+    br
+    label(for='job_number') Job Number
+    input(type="text" id='job_number' name="jobnum" required)
+    br
+    br
+    label(for='date') Due date
+    input(type="text" id='date' name="due_date")
+    br
+    br
+    label(for='addr') Address
+    input(type="text" id='addr' name="address")
+    br
+    br
+    label(for='job_status') Job Status:
+    p #{locals.job.status}
     br
     input(type="radio" name="status" value="1")
     label(for='job_status_1') Fieldwork
@@ -71,15 +64,24 @@ block content
     label(for='job_status_4') Completed
     br
     br
+    div(class='label')
+      //- +check_err( locals.input_errs['job'].notes )
+      label(for='job_notes') Notes:
+      //- span(class='req') Required
+    textarea(id='job_notes', name='notes', spellcheck='true', maxlength=4096)= job.JobNotes
+    br
 
     +print_field("Need by date: ", job.JobDateNeeded)
-    //- +print_field("Assigned to: ", job.JobAssignedTo)
 
     +print_field("Created: ", job.DateCreated)
     +print_field("Edited: ", job.DateEdited)
+    p(class='small') id: #{job.PropertyKey}
 
-    button(type='submit', name='action', value='update_property') Update Property
+    button(type='submit', name='action', value='update_job') Update Job
 
-  // TODO: Validate!
-  a(href='/jobs/destroy/' + job.PropertyKey) destroy
-  //- &#32;-&#32;
+    hr
+
+    //- TODO(jeff): Additional validations!
+    if job.PropertyKey != null
+      a(href='/jobs/destroy/' + job.PropertyKey) destroy
+      | &#32;-&#32;

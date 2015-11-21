@@ -1,15 +1,12 @@
 var express = require('express');
 var router = express.Router();
 
-// var rpc = require('rpc.js');
-// var rpcJs = rpc.gateway( { schema: require('../lib/api') } );
-
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get('/', function(req, res) {
   res.render('index', { title: 'blew infosys' } );
 });
 
-router.get('/index', function(req, res, next) {
+router.get('/index', function(req, res) {
   res.render('index', { title: 'blew infosys' } );
 });
 

@@ -1,5 +1,33 @@
 # Notes
 
+```js
+// #define function NOM_LOG_MSG(dev, msg) { if(dev === 'dev') { result = "console.log('dev: %s', msg)"; return result; } }
+// #put NOM_LOG_MSG('dev', "hello, boobies~!")+';'
+```
+
+```js
+// #define DEBUG_NODE_APP=1
+// #define function HELLO_MSG(msg) { return msg; }
+// #if DEBUG_NODE_APP==1
+// #put HELLO_MSG('var note = { msg: "hello, boobies~!" }')+';'
+// #put HELLO_MSG('console.log(note);')+';'
+// #endif
+
+// #define PI=Math.PI
+// #define function RADTODEG(x){return x*180/PI}
+var angle = // #put RADTODEG(3)+";"
+```
+
+```js
+// #include "lib/stub.js"
+// #include "lib/db.js"
+```
+
+```console
+mysqlimport --fields-optionally-enclosed-by="\"" --fields-terminated-by=',' \
+--lines-terminated-by="\n" --user=blew -p IR jobs.csv
+```
+
 ```console
 # TODO: Test passing of NULL params on everything
 
@@ -10,7 +38,7 @@ curl -i -X GET -d rpc='{"method":"list_pr","params":{}}' http://localhost:3000/a
 curl -i -X GET -d rpc='{"method":"list_pr","params":{"pid":"1"}}' http://localhost:3000/api/jobs
 
 # List jobs by their status
-curl -i -X GET -d rpc='{"method":"list_job_status","params":{"status":"2"}}' http://localhost:3000/api/jobs/list_status
+curl -i -X GET -d rpc='{"method":"list_pr","params":{"status":2}}' http://localhost:3000/api/jobs/
 
 # Create a job
 curl -i -X POST -d rpc='{"method":"create_job","params":{"jobnum": "15-555", "client": "jeff", "status":"2"}}' http://localhost:3000/api/jobs

@@ -8,35 +8,42 @@ block content
 
   a(href="" onclick="go_back()") Go Back
 
-  //- p Welcome to #{locals.settings.site_owner['name']}.
-  h1= title
+  h2 Job Status
 
-  if ordered_jobs != null && ordered_jobs.length > 0
-    h2 Ordered jobs:
-    each job in ordered_jobs
-      p
-        a(href="/jobs/#{job.PropertyKey}")= job.JobNum
+  a(href="/status/") All
+  | &#32;-&#32;
+  a(href="/status/fieldwork/") Fieldwork
+  | &#32;-&#32;
+  a(href="/status/drafting/") Drafting
+  | &#32;-&#32;
+  a(href="/status/review/") Review
+  | &#32;-&#32;
+  a(href="/status/completed/") Completed
+  | &#32;-&#32;
+  a(href="/status/unassigned/") Not assigned
+  | &#32;-&#32;
+  a(href="/status/assigned/") Assigned
 
-  if field_jobs != null && field_jobs.length > 0
-    h2 Jobs in the field:
-    each job in field_jobs
-      p
-        a(href="/jobs/#{job.PropertyKey}")= job.JobNum
+  if results != null
 
-  if drafting_jobs != null && drafting_jobs.length > 0
-    h2 Jobs in drafting:
-    each job in drafting_jobs
-      p
-        a(href="/jobs/#{job.PropertyKey}")= job.JobNum
+    if results.length > 1
+      - var num_jobs = 0;
+      each result in results
+        - num_jobs += result.jobs.length;
+      //- p Total number of jobs: #{num_jobs}
+      p #{num_jobs} jobs total
 
-  if review_jobs != null && review_jobs.length > 0
-    h2 Jobs up for review:
-    each job in review_jobs
-      p
-        a(href="/jobs/#{job.PropertyKey}")= job.JobNum
+    each result in results
+      - var status_desc = ''; //- i.e.: results.desc
+      - var num_jobs_per_cat = result.jobs.length;
+      - var num_jobs = 0;
 
-  if completed_jobs != null && completed_jobs.length > 0
-    h2 Completed jobs:
-    each job in completed_jobs
-      p
-        a(href="/jobs/#{job.PropertyKey}")= job.JobNum
+      if result.desc == null
+        - status_desc = result.type;
+      else
+        - status_desc = result.desc;
+
+      h3 (#{num_jobs_per_cat}) #{status_desc}
+      each job in result.jobs
+        p
+          a(href="/jobs/#{job.PropertyKey}")= job.JobNum

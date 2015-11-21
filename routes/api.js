@@ -16,6 +16,7 @@ output_fail = function(res, err) {
 }
 
 // NOTE(jeff): JSON RPC routes
+// TODO(jeff): validation of fields!!
 
 // pid (number) -- ID of the property
 // jobnum (number) -- Drawing number
@@ -29,19 +30,6 @@ router.get('/jobs', function(req, res) {
 
   rpcJs.input({
     input: { method: 'list_pr', params: params },
-    callback: function(output) {
-      output_result(res, output);
-    }
-  });
-});
-
-router.get('/jobs/list_status', function(req, res){
-
-  var rpc = JSON.parse(req.body.rpc);
-  var params = rpc.params;
-
-  rpcJs.input({
-    input: { method: 'list_job_status', params: params },
     callback: function(output) {
       output_result(res, output);
     }
@@ -82,6 +70,11 @@ router.post('/jobs', function(req, res){
 // pid (number) REQUIRED -- ID of job
 router.delete('/jobs', function(req, res) {
 
+  // TODO(jeff): Implement sanitizing of end-user input, such as passed in job
+  // ids.
+  //
+  //    See also:
+  // https://github.com/felixge/node-mysql#escaping-query-identifiers
   var rpc = JSON.parse(req.body.rpc);
   var params = rpc.params;
 
@@ -92,6 +85,24 @@ router.delete('/jobs', function(req, res) {
     }
   });
 
+});
+
+/*  SQL Query
+    SELECT * FROM IR_properties
+    WHERE MATCH (JobNum, JobNotes,JobContact) AGAINST
+    ('07-048 07-049 +boo -carp' IN BOOLEAN MODE);
+*/
+router.post('/search', function(req, res) {
+
+  var rpc = JSON.parse(req.body.rpc);
+  var params = rpc.params;
+
+  rpcJs.input({
+    input: { method: 'search', params: params },
+    callback: function(output) {
+      output_result(res, output);
+    }
+  });
 });
 
 module.exports = router;

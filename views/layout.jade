@@ -3,7 +3,18 @@ html
   head
     title= locals.settings.site_owner['company']
 
-    link(rel='stylesheet', href='/stylesheets/style.css')
+    //- Additional meta tags (per page)
+    block meta
+
+    // CSS
+    //- TODO(jeff): activate
+    //- link(href='/css/common.css', rel='stylesheet', type='text/css', media='screen')
+
+    link(href='/css/style.css', rel='stylesheet', type='text/css', media='screen')
+
+    // Use mobile styling for both device and small desktop windows
+    //- TODO(jeff): activate
+    //- link(href='/css/mobile.css', rel='stylesheet', type='text/css', media='only screen and (max-device-width: 767px)')
 
   // LiveReload
   script.
@@ -12,14 +23,14 @@ html
   body
     h1= locals.settings.site_owner['company']
     a(href="/") Home
-    &#32;-&#32;
+    | &#32;-&#32;
     a(href="/jobs/create") Create Job
-    &#32;-&#32;
+    | &#32;-&#32;
     a(href="/jobs/") View Jobs
-    &#32;-&#32;
-    a(href="/status") Status
-    &#32;-&#32;
-    a(href="/jobs/search") Search
+    | &#32;-&#32;
+    a(href="/status") Job Status
+    | &#32;-&#32;
+    a(href="/jobs/search") Job Search
     br
     br
 

@@ -15,31 +15,28 @@ block content
 
   a(href="" onclick="go_back()") Go Back
 
-  h2 Jobs
+  h2 Job Search
   p Results: #{results.length}
+
+    div(class='align-text-center')
+      form(id='cse-search-box-form-id', action=locals.loc.pathname, method='GET')
+        //- NOTE: Safari overrides our styling when the input field type is set to
+        //- 'search'.
+        input(id='cse-search-input-box', class='search_input', type='text', name='q', spellcheck=false, autocomplete='off', value= locals.query)
+        //- br
+        button(type='submit', class='search_button')
 
   if results.length > 0
     each job in results
 
-      +print_field("job_id: ", job.PropertyKey)
       +print_field("Client: ", job.JobContact)
       +print_field("Job Number: ", job.JobNum)
-      +print_field("Address: ", job.JobAddress)
       +print_field("Notes: ", job.JobNotes)
-
-      p Job Status:
-        b #{job.JobStatus}
-
-      +print_field("Due date: ", job.JobDateNeeded)
-      +print_field("Created: ", job.DateCreated)
-      +print_field("Edited: ", job.DateEdited)
-
       hr
-      // TODO: Validate!
+
+      //- TODO(jeff): Additional validations!
       if job.PropertyKey != null
         a(href='/jobs/' + job.PropertyKey) edit
-
-      | &#32;-&#32;
-      a(href='/jobs/destroy' + job.PropertyKey) destroy
-
-      hr
+        | &#32;-&#32;
+        a(href='/jobs/destroy' + job.PropertyKey) destroy
+        hr
