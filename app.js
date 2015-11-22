@@ -16,11 +16,14 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var session = require('express-session');
+var flash = require('connect-flash');
+
 var index = require('./routes/index');
 var contacts_api = require('./routes/contacts');
 var jobs = require('./routes/jobs');
 var jobs_api = require('./routes/api');
-// var users_api = require('./routes/users');
+var users_api = require('./routes/users');
 var status = require('./routes/status');
 
 var cors = require('cors');
@@ -38,6 +41,46 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Default session-store options
+//
+// Accessible through req.session
+//
+// https://github.com/expressjs/session
+var session_opts = {
+  cookie: {
+    maxAge: null,           // Default value from express-session docs
+    httpOnly: true
+    // HTTPS only
+    // secure: true
+  },
+
+  // Default values for getting rid of deprecated warnings logging from
+  // express-session
+  resave: true,             // Default value from express-session docs
+  saveUninitialized: true,  // Default value from express-session docs
+
+  // Session storage back-end; MemoryStore is *not* supported.
+  store: null,
+
+  // tokens: null,
+};
+
+// Initialize session
+//
+// This is a required dependency for the connect-flash module.
+if( process.env.SESSION_SECRET != null ) {
+  session_opts.secret = process.env.SESSION_SECRET;
+} else {
+  console.error( "app [ERROR]: SESSION_SECRET environment variable is not set." );
+  process.kill();
+}
+
+app.use( session(session_opts) );
+
+// Use connect-flash module for persistent state, i.e.: passing data across
+// more than one HTTP request
+app.use( flash() );
 
 // Global site settings
 //
@@ -106,7 +149,7 @@ app.use( cors() );
 app.use('/', index);
 app.use('/jobs', jobs);
 app.use('/status', status);
-// app.use('/users', users_api);
+app.use('/users', users_api);
 app.use('/api', jobs_api);
 
 

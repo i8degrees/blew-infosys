@@ -28,13 +28,14 @@ block content
       p Job Status:
         b #{job.JobStatus}
 
-      //- TODO: Validate!
-      if job.PropertyKey != null
-        a(href='/jobs/' + job.PropertyKey) [edit]
-        | &#32;-&#32;
+      if logged_in == true
+        //- TODO: Validate!
+        if job.PropertyKey != null
+          a(href='/jobs/' + job.PropertyKey) [edit]
+          | &#32;-&#32;
 
-      //- TODO: Validate!
-      if job.PropertyKey != null
-        a(href='/jobs/destroy' + job.PropertyKey) [destroy]
+        //- TODO: Validate!
+        if job.PropertyKey != null
+          a(href='/jobs/destroy' + job.PropertyKey) [destroy]
 
       hr

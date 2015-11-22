@@ -14,7 +14,17 @@ var rpcJs = rpc.gateway( { schema: require('../lib/api') } );
 router.get('/create', function(req, res) {
 
   var params = {};
-  res.render('create_job', params);
+  if(req.session.user) {
+    res.render('create_job', params);
+  } else {
+
+    var errno = {
+      status: 500,
+      message: 'You must be logged in to create a job.'
+    };
+
+    res.render('error', { error: errno });
+  }
 });
 
 // POST create job
@@ -60,6 +70,11 @@ router.post('/create', function(req, res) {
 router.get('/', function(req, res) {
 
   var user_query = req.query.q;
+  var logged_in = false;
+
+  if(req.session.user && req.session.pass) {
+    logged_in = true;
+  }
 
   if(user_query == null || user_query.length < 1) {
 
@@ -67,7 +82,7 @@ router.get('/', function(req, res) {
     rpcJs.input({
       input: { method: 'list_pr', params: {} },
       callback: function(output) {
-        res.render('jobs', { results: output.result } );
+        res.render('jobs', { results: output.result, logged_in: logged_in } );
       }
     });
   } else {
@@ -78,7 +93,7 @@ router.get('/', function(req, res) {
     rpcJs.input({
       input: { method: 'search', params: { query: user_query } },
       callback: function(output) {
-        res.render('jobs', { results: output.result } );
+        res.render('jobs', { results: output.result, logged_in: logged_in } );
       }
     });
   }
