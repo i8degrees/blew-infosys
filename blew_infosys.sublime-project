@@ -6,6 +6,7 @@
             "folder_exclude_patterns": [
                 "node_modules",
                 "public/css",
+                "public/stylesheets",
                 "public/js",
                 "public/img"
             ],
