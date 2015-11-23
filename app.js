@@ -35,19 +35,20 @@ var cors = require('cors');
 
 var app = express();
 
+// https://web.archive.org/web/20150815205449/http://greengeckodesign.com/blog/2013/06/15/creating-an-ssl-certificate-for-node-dot-js/
 var ssl_opts = {};
 if(app.get('env') === 'production') {
   // NOTE(jeff): Use Heroku's SSL back-end when available
   app.use( enforce_ssl.HTTPS( { trustProtoHeader: true }) );
 } else {
   // NOTE(jeff): Host a self-signed certificate SSL server
-  ssl_opts = {
-    key: fs.readFileSync('./keys/server.key'),
-    cert: fs.readFileSync('./keys/server.crt'),
-    ca: fs.readFileSync('./keys/ca.crt'),
-    requestCert: true,
-    rejectUnauthorized: false,
-  };
+  // ssl_opts = {
+  //   key: fs.readFileSync('./keys/server.key'),
+  //   cert: fs.readFileSync('./keys/server.crt'),
+  //   ca: fs.readFileSync('./keys/ca.crt'),
+  //   requestCert: true,
+  //   rejectUnauthorized: false,
+  // };
 }
 
 // view engine setup
@@ -227,25 +228,11 @@ if(app.get('env') === 'development') {
 module.exports = app;
 
 var port = Number(process.env.PORT || 3000);
-
-if(app.get('env') === 'production') {
-  // NOTE(jeff): Use Heroku's SSL back-end when available
-  var server = app.listen(port, function() {
-    var tcp_family = server.address().family;
-    var tcp_addr = server.address().address;
-    var tcp_port = server.address().port;
-    console.log('Listening at TCP/IP %s: %s:%d', tcp_family, tcp_addr, tcp_port);
-    console.log('Site environment: %s', app.get('env') );
-    // console.log('Remote resource fetching: %s ', app.get('remote') );
-  });
-} else {
-  // NOTE(jeff): Host a self-signed certificate SSL server
-  var server = https.createServer(ssl_opts, app).listen(port, function() {
-    var tcp_family = server.address().family;
-    var tcp_addr = server.address().address;
-    var tcp_port = server.address().port;
-    console.log('Listening at TCP/IP %s: %s:%d', tcp_family, tcp_addr, tcp_port);
-    console.log('Site environment: %s', app.get('env') );
-    // console.log('Remote resource fetching: %s ', app.get('remote') );
-  });
-}
+var server = app.listen(port, function() {
+  var tcp_family = server.address().family;
+  var tcp_addr = server.address().address;
+  var tcp_port = server.address().port;
+  console.log('Listening at TCP/IP %s: %s:%d', tcp_family, tcp_addr, tcp_port);
+  console.log('Site environment: %s', app.get('env') );
+  // console.log('Remote resource fetching: %s ', app.get('remote') );
+});
