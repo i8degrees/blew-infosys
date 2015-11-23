@@ -1,0 +1,1028 @@
+$burgundy: #d1001a;
+$dark_blue: #1567C4;
+$sky_blue: #5eb0ea;
+$light_tan: #ffc;
+$light_gray: #EBEBEA;
+$dark_gray: #CACACA;
+
+$header_bg_color: #C3DFB7;
+$welcome_bg_color: #DFFFD1;
+
+$company_header_font: 'Arbutus Slab', serif;
+$content_font: 'Open Sans', sans-serif;
+$header_font: 'Lora', serif;
+
+$err_bg_color: #FFEBDC;
+
+/* Do not show bullet points in navigation menu */
+nav ul {
+  list-style: none;
+}
+
+/* Default link style */
+
+a {
+  color: $dark_blue;
+  text-decoration: none;
+}
+
+a:hover {
+  color: black;
+  cursor: pointer;
+}
+
+/* EOF: Default link style */
+
+fieldset {
+  border: none;
+  border-top: 1px solid black;
+}
+
+legend {
+  font-weight: 600;
+}
+
+input, select, textarea {
+  /* Offset text within field */
+  padding-left: 10px;
+  padding-right: 10px;
+  font-size: 100%;
+  font-weight: 600;
+  font-family: 'Arial', sans-serif;
+}
+
+select {
+  font-weight: normal;
+}
+
+textarea {
+  resize: vertical;
+  // max-height: 320px;
+}
+
+input:focus {
+  background-color: $light_tan;
+}
+
+textarea:focus {
+  background-color: $light_tan;
+}
+
+html {
+  font-size: 16px;
+}
+
+/* Top-level style container */
+.page {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: $content_font;
+  font-size: 100%;
+
+  letter-spacing: 0.5px;
+  line-height: 1.8em;
+
+  color: black;
+  background-color: white;
+
+  /* Gray */
+  /*background-color: $light_gray;*/
+
+  /* Green */
+  /*background-color: #C3DFB7;*/
+
+  /* Debugging aid */
+  // border: 1px dashed gray;
+}
+
+/* Top-level header container (includes navigation) */
+.header {
+  /* Necessary for the company header to fit */
+  padding-top: 4%;
+
+  /*background-color: white;*/
+
+  /* Gray */
+  /*background-color: $light_gray;*/
+
+  background-color: $header_bg_color;
+
+  border: none;
+
+  /* Debugging aid */
+  /*border: 1px solid red;*/
+}
+
+.company-header {
+  float: left;
+
+  /* We want the site header to be a stateless hyper-link (no change in color) */
+  text-decoration: none;
+
+  font-family: 'Arbutus Slab', serif;
+  /*font-family: 'Adamina', serif;*/
+  /*font-family: 'Lora', serif;*/
+
+  font-size: 200%;
+
+  color: $burgundy;
+
+  padding-left: 2%;
+}
+
+.company-header:hover {
+  /* Burgundy */
+  color: #d1001a;
+
+  cursor: pointer;
+}
+
+/* Top-level navigation container */
+.nav {
+  font-weight: 600;
+  font-size: 131.5%;
+
+  // box-shadow: 0px 2px 2px #888888;
+}
+
+.nav-primary {
+  clear: left;
+
+  background-color: $header_bg_color;
+
+  /* The negative margins corrects a rendering issue in Safari where it
+  only *sometimes* renders partials of the non-current navigation items */
+  overflow: hidden;
+}
+
+.nav-primary ul {
+  display: inline;
+}
+
+.nav-primary li {}
+
+.nav-primary li:last-child {
+  /*border-bottom: 0;*/
+}
+
+.nav-primary a {
+  display: inline;
+  padding: 8px 12px;
+  text-decoration: none;
+  color: #333;
+}
+
+.nav-primary a:hover {
+  color: $dark_blue;
+}
+
+.nav-primary .nav-current a {
+  color: #333;
+}
+
+/* Apply an underline effect under the active page (link) */
+.nav-primary .nav-current {
+  border-bottom: 3px solid $sky_blue;
+}
+
+.nav-primary .nav-current a:hover {
+  color: $dark_blue;
+}
+
+/* drop down menu formatting when all menu items won't fit in a single line */
+.nav-menu .nav-primary {
+  // Offset between the navigation menu and content container
+  // margin: 0 0 1.5em;
+
+  // Debugging aid
+  // background-color: gray;
+}
+
+.nav-menu .nav-primary a {
+  /*padding-right: 3em;*/
+}
+
+.nav-menu .nav-primary li {
+  clear: left;
+  display: none;
+}
+
+/* Controls the display of the page links upon menu drop-down */
+.nav-menu .nav-primary.expanded li {
+  display: list-item;
+
+  /* Bit of an offset for our underline border (current page) */
+  margin-left: 2%;
+
+  /* Easy touch clicks */
+  line-height: 2.5em;
+}
+
+li.nav-current {}
+.nav-menu .nav-primary li.nav-current {}
+.nav-menu .nav-primary.expanded li.nav-current {}
+
+@media screen and (min-width: 320px) {
+  .nav-primary,
+  .nav-primary ul {
+    /*float: left;*/
+  }
+
+  .nav-primary ul {
+    /*float: left;*/
+  }
+
+  .nav-primary li {
+    float: left;
+    /*border-bottom: 0;*/
+  }
+
+  /* Styled container box for .chrome-bar */
+  /* Use with a button element */
+  .mobile-nav .chrome-btn {
+    float: right;
+    background-color: transparent;
+    border: 1px solid transparent;
+    padding: 5px 8px;
+    margin-right: 15px;
+    border-radius: 5px;
+    border-color: gray;
+    cursor: pointer;
+    outline: none;
+    margin-top: -5px;
+  }
+
+  .mobile-nav .chrome-btn:hover {
+    background-color: $light_gray;
+    border-color: $light_gray;
+  }
+
+  /* Individual line within container */
+  /* Use with a span element */
+  .mobile-nav .chrome-bar {
+    display: block;
+    width: 22px;
+    height: 3px;
+    border-radius: 1px;
+    background-color: black;
+    margin-top: 4px;
+    margin-bottom: 4px;
+  }
+}
+
+/* FIXME: smaller navigation menu? 1092px feels a bit much... */
+@media screen and (min-width: 1092px) {
+
+  .nav {
+    // FIXME: Fill in the missing gaps (white background)
+    // Hint: floats! Comment out the padding and float declarations within
+    // this media query to see what I mean ...
+    padding-bottom: 6%;
+  }
+
+  .nav-primary {
+    float: right;
+    clear: none;
+  }
+
+  .nav-primary li {
+    float: left;
+  }
+
+  .mobile-nav .chrome-btn {
+    display: none;
+
+    /* If float is not turned off, it messes up the layout calculations for
+    determining when to switch to mobile navigation */
+    /* ...doesn't seem to do anything anymore! */
+    /*float: none;*/
+  }
+}
+
+.search_input {
+  width: 400px;
+  height: 38px;
+  font-family: $content_font;
+  font-weight: 600;
+  font-size: 100%;
+  border: 1px solid #666;
+
+  /* Spacing in between navi links & input element */
+  // margin-left: 20px;
+}
+
+/* Google's CSE script overrides this selector */
+.search_input:focus {
+  background-color: $light_tan;
+}
+
+.search_button {
+  border: none;
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+  background: url('/images/search.png') no-repeat;
+  cursor: pointer;
+}
+
+/* Desktop only */
+.breadcrumb-link {
+  display: inline;
+  padding-right: 6px;
+  color: black;
+  text-decoration: none;
+}
+
+.breadcrumb-active {
+  text-decoration: none;
+  color: black;
+  /*font-weight: 600;*/
+
+  /*color: white;*/
+}
+
+.content_container {
+  width: 96%;
+  clear: both;
+  margin-top: 1%;
+  margin-bottom: 1%;
+  // Center horizontally
+  margin-left: auto;
+  margin-right: auto;
+
+  /*padding: 0;*/
+  /*background-color: white;*/
+
+  /* Gray */
+  /*background-color: $light_gray;*/
+
+  /* Debugging aid */
+  /*border: 1px solid gray;*/
+
+  font-family: $content_font;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: $header_font !important;
+}
+
+/* Top-level footer container */
+.footer {
+  clear: both;
+
+  padding: 2%;
+
+  /* Gray */
+  background-color: $dark_gray;
+
+  // box-shadow: 0px 0px 4px black;
+}
+
+.help {
+  clear: both;
+  width: 100%;
+  // box-shadow: 0px 0px 4px black;
+  // background-color: #FEFCCA;
+  background-color: $welcome_bg_color;
+  padding-top: 25px;
+  padding-bottom: 25px;
+}
+
+.footer .disclaimer {
+  font-size: 75%; // of 16px
+}
+
+.footer .owner-copyright {
+  font-size: 100%; // of 16px
+  font-style: normal !important;
+  font-weight: 400;
+}
+
+.footer .dev-copyright {
+  font-size: 75%; // of 16px
+  font-style: normal !important;
+  font-weight: 400;
+}
+
+.contact_form {
+  font-family: $content_font;
+}
+
+.contact_form .label {
+  margin-top: 10px;
+  font-weight: 600;
+}
+
+// Do not use adjusted font-weight for TOS checkbox input field
+.contact_form .label .tos {
+  font-weight: normal;
+}
+
+.contact_form .req {
+  display: block;
+  font-weight: normal;
+  // font-weight: 600;
+  font-size: 75%;
+  color: gray;
+}
+
+/* Container to hold both the form input element and applicable error message */
+.contact_form .input_container {
+  // Account for the 2% left and right margins
+  width: 96%;
+}
+
+.contact_form #contact_name, #contact_email, #website_url, #contact_message {
+  // Expand to the full width of the input_container class, accounting for
+  // platform-dependent margins (i.e.: mobile)
+  width: 96%;
+
+  height: 38px;
+}
+
+.contact_form #phone_area, #phone_prefix {
+  width: 40px;
+  height: 38px;
+}
+
+.contact_form #phone_suffix {
+  /* Firefox & iPad needs at least 60px */
+  width: 60px;
+  height: 38px;
+}
+
+.contact_form #contact_message {
+  height: 120px;
+}
+
+// .contact_form fieldset {
+//   max-width: 50%;
+// }
+
+// .contact_form #phone_ext {
+//   width: 40px;
+
+//   // Spacing in between the extension and phone suffix
+//   margin-left: 10px;
+
+//   height: 38px;
+// }
+
+// .contact_form #contact_state, #pref {
+//   width: 250px;
+//   height: 38px;
+// }
+
+// .contact_form #contact_zipcode {
+//   width: 100px;
+//   height: 38px;
+// }
+
+.border-rounded {
+  -moz-border-radius: 21px;
+  -webkit-border-radius: 21px;
+  border-radius: 21px;
+}
+
+.blue-button {
+  padding: 14px 28px !important;
+  border: none;
+  color: white !important;
+  font-family: $content_font;
+  font-size: 100%;
+  font-weight: 600;
+  text-decoration: none;
+  text-align: center;
+  vertical-align: middle;
+
+  /* Spacing in between buttons */
+  margin-left: 20px;
+
+  background: $sky_blue;
+  cursor: pointer;
+}
+
+.blue-button:hover {
+  /* sky blue (darker) */
+  background: #468CCF !important;
+}
+
+.orange-button {
+  padding: 14px 28px !important;
+  border: none;
+  color: white !important;
+  font-family: $content_font;
+  font-size: 100%;
+  font-weight: 600;
+  text-decoration: none;
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer;
+
+  /* Spacing in between buttons */
+  // margin-left: 20px;
+
+  /* Orange (lighter) to Orange (darker) */
+  /*background: linear-gradient(to bottom, #FA9334, #F4712B);*/
+
+  /* Orange (lighter) */
+  background: #FA9334;
+}
+
+.orange-button:hover {
+  /* Orange (darker) */
+  background: #F4712B;
+}
+
+.margin-top-offset20 {
+  margin-top: 20px;
+}
+
+.margin-top-offset25 {
+  margin-top: 25px;
+}
+
+.margin-bottom-offset25 {
+  margin-bottom: 25px;
+}
+
+.margin-bottom-offset50 {
+  margin-bottom: 50px;
+}
+
+.margin-left-offset20 {
+  margin-left: 20px;
+}
+
+.margin-right-offset10 {
+  margin-right: 10px;
+}
+
+.padding-top-offset10 {
+  padding-top: 10px;
+}
+
+.padding-top-offset20 {
+  padding-top: 20px;
+}
+
+.padding-top-offset25 {
+  padding-top: 25px;
+}
+
+.padding-right-offset16 {
+  padding-right: 16px;
+}
+
+.padding-right-offset25 {
+  padding-right: 25px;
+}
+
+.padding-left-offset10 {
+  padding-left: 10px;
+}
+
+.padding-left-offset20 {
+  padding-left: 20px;
+}
+
+.padding-bottom-offset10 {
+  padding-bottom: 10px;
+}
+
+.padding-bottom-offset20 {
+  padding-bottom: 20px;
+}
+
+.padding-bottom-offset25 {
+  padding-bottom: 25px;
+}
+
+/* Helpers */
+
+.sky-blue {
+  color: $sky_blue;
+}
+
+.align-text-left {
+  text-align: left;
+}
+
+.align-text-center {
+  text-align: center;
+}
+
+.align-text-right {
+  text-align: right;
+}
+
+.align-left {
+  margin-right: auto;
+}
+
+.align-center {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.align-right {
+  margin-left: auto;
+}
+
+.float-left {
+  float: left;
+}
+
+.float-right {
+  float: right;
+}
+
+.float-left-reset {
+  clear: left;
+}
+
+.float-right-reset {
+  clear: right;
+}
+
+.float-reset {
+  clear: both;
+}
+
+.heading1 {
+  font-size: 218.75%;
+  font-weight: 600;
+  line-height: 1.3em;
+  font-family: $content_font !important;
+}
+
+.heading2 {
+  font-size: 109.38%;
+  font-weight: 600;
+  line-height: 1.3em;
+  font-family: $content_font !important;
+}
+
+.contact-info {
+  border: none;
+  border-spacing: 10px;
+}
+
+.bold {
+  font-weight: 800;
+}
+
+.semi-bold {
+  font-weight: 600;
+}
+
+.err {
+  font-size: 100%; // of 16px
+  font-weight: 600;
+  text-align: left;
+  color: red;
+  // Indention
+  padding-left: 5px;
+
+  // width: 25%;
+  // background-color: $err_bg_color;
+}
+
+.sans {
+  font-family: $content_font;
+}
+
+/* Experimental (breaks Mobile Safari select input fields) */
+/* Return value must be enabled in lib/form_helpers.js */
+.red-border {
+  // border: 1px solid red;
+  outline: 1px solid red;
+}
+
+.red-border:focus {
+  // border: 1px solid red;
+  outline: 2px solid red;
+}
+
+.gray-border {
+  border: 1px solid #999;
+}
+
+.note {
+  font-size: 78.75%;
+  font-style: italic;
+  font-family: $content_font;
+}
+
+.label {
+  width: inherit;
+}
+
+.address, address {
+  font-family: $content_font;
+  font-style: normal;
+}
+
+/* Google Static Map */
+/* Rely on the web browser to rescale our raster map (fluid layout friendly) */
+.google_map, .map_caption {
+  width: 75%;
+  height: 75%;
+}
+
+.code-box {
+  border: 2px solid grey;
+  background: white;
+  border-radius: 0;
+  margin-bottom: 10px;
+}
+
+// Base class for Social Media buttons
+//
+// Source: http://www.kodingmadesimple.com/2014/02/how-to-create-round-social-media-icon.html
+.social-btn {
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+  width: 50px;
+  height: 50px;
+  box-shadow: 0 2px 2px #999;
+  padding: 0px;
+  text-decoration: none;
+  text-align: center;
+  color: #fff;
+  font-size: 25px;
+  font-weight: normal;
+  line-height: 2em;
+  // border-radius: 25px;
+  // -moz-border-radius:25px;
+  // -webkit-border-radius:25px;
+}
+
+// Facebook button
+//
+// Derives from the social-btn class
+//
+// Source: http://www.kodingmadesimple.com/2014/02/how-to-create-round-social-media-icon.html
+.facebook-btn {
+  background: #4060A5;
+}
+
+// Facebook button helper class
+//
+// Source: http://www.kodingmadesimple.com/2014/02/how-to-create-round-social-media-icon.html
+.facebook-btn:before {
+  font-family: "FontAwesome";
+  // FontAwesome glyph
+  content: "\f09a";
+}
+
+// Facebook button selector for the hover event
+//
+// Source: http://www.kodingmadesimple.com/2014/02/how-to-create-round-social-media-icon.html
+.facebook-btn:hover {
+  color: #4060A5;
+  background: #fff;
+}
+
+// Twitter button
+//
+// Derives from the social-btn class
+//
+// Source: http://www.kodingmadesimple.com/2014/02/how-to-create-round-social-media-icon.html
+.twitter-btn {
+  background: #00ABE3;
+}
+
+// Twitter button helper class
+//
+// Source: http://www.kodingmadesimple.com/2014/02/how-to-create-round-social-media-icon.html
+.twitter-btn:before {
+  font-family: "FontAwesome";
+  // FontAwesome glyph
+  content: "\f099";
+}
+
+// Twitter button selector for the hover event
+//
+// Source: http://www.kodingmadesimple.com/2014/02/how-to-create-round-social-media-icon.html
+.twitter-btn:hover {
+  color: #00ABE3;
+  background: #fff;
+}
+
+// LinkedIn button
+//
+// Derives from the social-btn class
+//
+// Source: http://www.kodingmadesimple.com/2014/02/how-to-create-round-social-media-icon.html
+.linkedin-btn {
+  background: #0094BC;
+}
+
+// LinkedIn button helper class
+//
+// Source: http://www.kodingmadesimple.com/2014/02/how-to-create-round-social-media-icon.html
+.linkedin-btn:before {
+  font-family: "FontAwesome";
+  // FontAwesome glyph
+  content: "\f0e1";
+}
+
+// LinkedIn button selector for the hover event
+//
+// Source: http://www.kodingmadesimple.com/2014/02/how-to-create-round-social-media-icon.html
+.linkedin-btn:hover {
+  color: #0094BC;
+  background: #fff;
+}
+
+// RSS button
+//
+// Derives from the social-btn class
+//
+// Source: http://www.kodingmadesimple.com/2014/02/how-to-create-round-social-media-icon.html
+.rss-btn {
+  background: #e88845;
+}
+
+// RSS button helper class
+//
+// Source: http://www.kodingmadesimple.com/2014/02/how-to-create-round-social-media-icon.html
+.rss-btn:before {
+  font-family: "FontAwesome";
+  // FontAwesome glyph
+  content: "\f09e";
+}
+
+// RSS button selector for the hover event
+//
+// Source: http://www.kodingmadesimple.com/2014/02/how-to-create-round-social-media-icon.html
+.rss-btn:hover {
+  color: #e88845;
+  background: #fff;
+}
+
+/* Responsive CSS Design */
+/* Source: http://www.responsivegridsystem.com/calculator/ */
+
+/*  SECTIONS  */
+.section {
+  clear: both;
+  padding: 0px;
+  margin: 0px;
+}
+
+/*  COLUMN SETUP  */
+.col {
+  display: block;
+  float: left;
+  margin-top: 1%;
+  margin-right: 0%;
+  margin-bottom: 1%;
+  margin-left: 1.6%;
+}
+
+.col:first-child {
+  margin-left: 0;
+}
+
+/*  GROUPING  */
+.group:before,
+.group:after {
+  content: "";
+  display: table;
+}
+
+.group:after {
+  clear: both;
+}
+
+.group {
+  zoom: 1; /* For IE 6/7 */
+}
+
+/*  GRID OF TWO  */
+.two-cols-span2 {
+  width: 100%;
+}
+
+.two-cols-span1 {
+  width: 49.2%;
+}
+
+/*  GRID OF THREE  */
+.three-cols-span3 {
+  width: 100%;
+}
+
+.three-cols-span2 {
+  width: 66.13%;
+}
+
+.three-cols-span1 {
+  width: 32.26%;
+}
+
+// Two column grid for the home site page
+
+// Contact form (right)
+.home .two-cols-span2 {
+  width: 24.2%;
+}
+
+// Content (left)
+.home .two-cols-span1 {
+  width: 74.2%;
+}
+
+.col ul {
+  list-style-image: url('/images/checkmark.png');
+}
+
+// Two column grid for the about site page
+
+// Content (right)
+.about .two-cols-span2 {
+  width: 24.2%;
+}
+
+// Picture (left)
+.about .two-cols-span1 {
+
+  width: 74.2%;
+}
+
+// Two column grid for the practice site page
+
+// Contact form (right)
+.practice .two-cols-span2 {
+  // width: 24.2%;
+
+  // Minimum width requirements for rendering phone number form field on one
+  // line for Mobile Safari (iPad, iPad Retina)
+  width: 39.2%;
+}
+
+// Content (left)
+.practice .two-cols-span1 {
+  // width: 74.2%;
+
+  // Minimum width requirements for rendering phone number form field on one
+  // line for Mobile Safari (iPad, iPad Retina)
+  width: 59.2%;
+}
+
+/* Full width columns (stacked) when content can *not* fit */
+@media only screen and (max-width: 767px) {
+  .col {
+    margin-top: 1%;
+    margin-right: 0%;
+    margin-bottom: 1%;
+    margin-left: 0%;
+  }
+
+  /* Hide visually and from screen readers: h5bp.com/u */
+  .hidden {
+    display: none !important;
+    visibility: hidden;
+  }
+
+  .two-cols-span2, .two-cols-span1,
+  .three-cols-span3, .three-cols-span2, .three-cols-span1 {
+    width: 100%;
+  }
+
+  .home .two-cols-span2, .home .two-cols-span1,
+  .about .two-cols-span2, .about .two-cols-span1,
+  .practice .two-cols-span2, .practice .two-cols-span1 {
+    width: 100%;
+  }
+}
+
+.welcome-container {
+  background-color: $welcome_bg_color;
+
+  // Expand to full width (excluding margins set by the content_container class)
+  // width: 96%;
+  margin-top: -1%;
+  margin-left: -2%;
+  margin-right: -2%;
+  padding-left: 2%;
+  padding-right: 2%;
+}
+
+.welcome-banner {
+  background-color: $welcome_bg_color;
+
+  // Horizontal centering alignment
+  width: 75%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.about img {
+  width: 100%;
+  height: 100%;
+}

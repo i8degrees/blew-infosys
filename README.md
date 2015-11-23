@@ -24,6 +24,15 @@ var angle = // #put RADTODEG(3)+";"
 ```
 
 ```console
+# Install site build dependencies
+npm install -g grunt-cli
+gem install sass
+
+# Install app dependencies
+npm install
+```
+
+```console
 mysqlimport --fields-optionally-enclosed-by="\"" --fields-terminated-by=',' \
 --lines-terminated-by="\n" --user=blew -p IR jobs.csv
 ```
@@ -66,23 +75,16 @@ curl -i -X GET -d rpc='{"method":"search","params":{ "query": "dev*"}}' http://l
 ## TODO
 
 - [ ] Consider login through Google Apps..?
-
 - [ ] Evaluate IR_Property::Area SQL data type
 - [ ] Rename lib dir to models
 - [ ] Ensure that all SQL queries are escaped!!!
-
-- [ ] Remove count object in api.js
+- [x] Remove count object in api.js
   * Confirmed that this is what causes us to need to specify pr_rows.length > 1 to test SQL results, i.e.: properties.jade && why results display is +1 off, i.e.: properties page
-
 - [ ] API documentation; see also: groups in ```lib/rpc.js```
-
 - [ ] Optimize database table fields; start by matching the native DBISAM
 table fields with our MySQL field equivilent, i.e.: IR_pr::JobNum should be
 thirty (30) digits, not sixteen (16).
-
 - [ ] db/uninstall.sh
-
-- [ ] Import RTWin_co and RTWin_pr BLOBs; i.e.: JobNotes (MEMO field)
 
 ## Optimizations
 

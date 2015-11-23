@@ -1,0 +1,87 @@
+/* Small window & mobile friendly layout (optimized for a width of 320) */
+/*@media only screen and (max-width: 767px), only screen and (max-device-width: 767px) {*/
+@media only screen and (max-device-width: 767px) {
+
+  .page {
+    font-size: 100%;
+  }
+
+  .company-header {
+    // FIXME: The font size is too small on high resolution (i.e.: Retina)
+    // displays...
+    font-size: 150%;
+    // padding-bottom: 6%;
+  }
+
+  .nav {
+    /*text-align: left;*/
+
+    // FIXME: Filler for mobile navigation menu
+    padding-bottom: 6%;
+  }
+
+  /* Desktop only */
+  .search_input {
+    display: none;
+  }
+
+  /* Desktop only */
+  .search_button {
+    background: none;
+    display: none;
+  }
+
+  /* Desktop only */
+  .breadcrumb-link {
+    display: none;
+  }
+
+  /* Desktop only */
+  .breadcrumb-active {
+    display: none;
+  }
+
+  .contact_form #phone_area, #phone_prefix {
+    width: 30px;
+  }
+
+  .contact_form #phone_suffix {
+    width: 40px;
+  }
+
+  .contact_form #contact_message {
+    height: 240px;
+  }
+
+  /* Google Static Map */
+  /* Use native resolution of the image */
+  .google_map, .map_caption {
+    width: 100%;
+    height: 100%;
+  }
+
+  .welcome-banner {
+    // Make full use of what little width we have; this results in the
+    // nullification of the horizontal centering alignment
+    width: 100%;
+  }
+
+  // .contact_form fieldset {
+  //   max-width: 98%;
+  // }
+
+  // .contact_form #phone_ext {
+  //   width: 30px;
+
+  //   // Spacing in between the extension and phone suffix
+  //   margin-left: 10px;
+  // }
+
+  // .contact_form #contact_state {
+  //   // width: 175px;
+  // }
+
+  // .contact_form #contact_zipcode {
+  //   // width: 50px;
+  // }
+}
