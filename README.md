@@ -74,6 +74,7 @@ curl -i -X GET -d rpc='{"method":"search","params":{ "query": "dev*"}}' http://l
 
 ## TODO
 
+- [x] Enable HTTP SSL server
 - [ ] Consider login through Google Apps..?
 - [ ] Evaluate IR_Property::Area SQL data type
 - [ ] Rename lib dir to models

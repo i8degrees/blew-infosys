@@ -12,6 +12,8 @@ tmp
 public/testme.html
 sass/testme.scss
 keys/*
+models/sessions/*
+
 
 # Site environment(s)
 .env

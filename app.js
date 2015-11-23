@@ -10,13 +10,18 @@ var dotenv = require('dotenv');
 // of NODE_ENV, a BASH environment variable.
 dotenv.load();
 
+var fs = require('fs');
 var express = require('express');
+var http = require('http');
+var https = require('https');
+var enforce_ssl = require('express-sslify');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
+var FileStore = require('session-file-store')(session);
 var flash = require('connect-flash');
 
 var index = require('./routes/index');
@@ -30,6 +35,21 @@ var cors = require('cors');
 
 var app = express();
 
+var ssl_opts = {};
+if(app.get('env') === 'production') {
+  // NOTE(jeff): Use Heroku's SSL back-end when available
+  app.use( enforce_ssl.HTTPS( { trustProtoHeader: true }) );
+} else {
+  // NOTE(jeff): Host a self-signed certificate SSL server
+  ssl_opts = {
+    key: fs.readFileSync('./keys/server.key'),
+    cert: fs.readFileSync('./keys/server.crt'),
+    ca: fs.readFileSync('./keys/ca.crt'),
+    requestCert: true,
+    rejectUnauthorized: false,
+  };
+}
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -42,41 +62,48 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Default session-store options
+// Initialize persistent data store -- user sessions and cookies
 //
-// Accessible through req.session
+// NOTE(jeff): Accessible through the route's req.session variable.
 //
 // https://github.com/expressjs/session
-var session_opts = {
-  cookie: {
-    maxAge: null,           // Default value from express-session docs
-    httpOnly: true
-    // HTTPS only
-    // secure: true
-  },
+// https://github.com/valery-barysok/session-file-store
 
-  // Default values for getting rid of deprecated warnings logging from
-  // express-session
-  resave: true,             // Default value from express-session docs
-  saveUninitialized: true,  // Default value from express-session docs
-
-  // Session storage back-end; MemoryStore is *not* supported.
-  store: null,
-
-  // tokens: null,
+var session_file_opts = {
+  path: './models/sessions',
 };
 
-// Initialize session
-//
-// This is a required dependency for the connect-flash module.
-if( process.env.SESSION_SECRET != null ) {
-  session_opts.secret = process.env.SESSION_SECRET;
+var session_secret = '';
+if(process.env.SESSION_SECRET != null) {
+  // Use environment variable set in one of the .env site files
+  session_secret = process.env.SESSION_SECRET;
 } else {
-  console.error( "app [ERROR]: SESSION_SECRET environment variable is not set." );
-  process.kill();
+  // Default value for when the environment variable is **not** set
+  session_secret = 'not a secure session secret!!!';
+  console.warn("app [WARN]: SESSION_SECRET environment variable is not set; using insecure default!");
 }
 
-app.use( session(session_opts) );
+var secure_cookies = false;
+if(app.get('env') === 'production') {
+  app.set('trust proxy', 1);  // trust first proxy
+  secure_cookies = true;
+}
+
+app.use( session({
+  store: new FileStore(session_file_opts),
+  secret: session_secret,
+  cookie: {
+    // NOTE(jeff): This means 'no expiration'. In effect, this means that the
+    // end-user's cookie (and session) will be removed upon the action of
+    // closing the browser.
+    maxAge: null,
+    // httpOnly: true,
+    // NOTE(jeff): Requires HTTPS (SSL)
+    secure: secure_cookies,
+  },
+  resave: true,
+  saveUninitialized: true,
+}));
 
 // Use connect-flash module for persistent state, i.e.: passing data across
 // more than one HTTP request
@@ -201,11 +228,24 @@ module.exports = app;
 
 var port = Number(process.env.PORT || 3000);
 
-var server = app.listen(port, function() {
-  var tcp_family = server.address().family;
-  var tcp_addr = server.address().address;
-  var tcp_port = server.address().port;
-  console.log('Listening at TCP/IP %s: %s:%d', tcp_family, tcp_addr, tcp_port);
-  console.log('Site environment: %s', app.get('env') );
-  // console.log('Remote resource fetching: %s ', app.get('remote') );
-});
+if(app.get('env') === 'production') {
+  // NOTE(jeff): Use Heroku's SSL back-end when available
+  var server = app.listen(port, function() {
+    var tcp_family = server.address().family;
+    var tcp_addr = server.address().address;
+    var tcp_port = server.address().port;
+    console.log('Listening at TCP/IP %s: %s:%d', tcp_family, tcp_addr, tcp_port);
+    console.log('Site environment: %s', app.get('env') );
+    // console.log('Remote resource fetching: %s ', app.get('remote') );
+  });
+} else {
+  // NOTE(jeff): Host a self-signed certificate SSL server
+  var server = https.createServer(ssl_opts, app).listen(port, function() {
+    var tcp_family = server.address().family;
+    var tcp_addr = server.address().address;
+    var tcp_port = server.address().port;
+    console.log('Listening at TCP/IP %s: %s:%d', tcp_family, tcp_addr, tcp_port);
+    console.log('Site environment: %s', app.get('env') );
+    // console.log('Remote resource fetching: %s ', app.get('remote') );
+  });
+}
