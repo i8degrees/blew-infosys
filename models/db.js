@@ -114,7 +114,9 @@ module.exports = {
     assert(opts.sort);
     assert(opts.limit);
 
-    var query = 'SELECT * FROM users ';
+    // NOTE(jeff): Adds additional field onto the end of results, addressable
+    // as "INET_NTOA(user_ip)"
+    var query = 'SELECT *, INET_NTOA(user_ip) FROM users ';
     if(opts.uid) {
       query += this.format('WHERE user_id = ? ', opts.uid);
     }

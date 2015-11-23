@@ -384,7 +384,7 @@ module.exports = {
 
         var query = 'INSERT INTO `users` SET user_id = ?, ' +
           'user_password = PASSWORD(?), date_created = NOW(), ' +
-          'date_edited = NOW(), user_ip = ?';
+          'date_edited = NOW(), user_ip = INET_ATON(?)';
 
         // TODO(jeff): validation of fields
         var values = [ params.uid, params.password, user_ip ];
