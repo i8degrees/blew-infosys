@@ -77,7 +77,7 @@ curl -i -X GET -d rpc='{"method":"list_users","params":{}}' http://localhost:300
 curl -i -X GET -d rpc='{"method":"list_users","params":{ "uid": "admin"}}' http://localhost:3000/api/users/
 
 # Create user
-curl -i -X POST -d rpc='{"method":"create_user","params":{ "uid": 'testme' }}' http://localhost:3000/api/users/create/
+curl -i -X POST -d rpc='{"method":"create_user","params":{ "uid": "testme", "password": "boobies" }}' http://localhost:3000/api/users/create/
 
 # TODO: test duplicate user_id
 
@@ -85,6 +85,7 @@ curl -i -X POST -d rpc='{"method":"create_user","params":{ "uid": 'testme' }}' h
 
 ## TODO
 
+- [ ] Rename SQL tables
 - [ ] Add postinstall deployment step for setting up SQL databases; see
 bin/setup.sh
 - [x] Enable HTTP SSL server
