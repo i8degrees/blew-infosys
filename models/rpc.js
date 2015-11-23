@@ -373,6 +373,7 @@ module.exports = {
       params: {
         uid: { required: true, type: 'string', info: 'user name'},
         password: { required: true, type: 'string', info: 'unencrypted password'},
+        ip: { required: false, type: 'string', info: 'IPv4 TCP address of user'},
       },
 
       action: function(params, output) {
@@ -381,6 +382,10 @@ module.exports = {
 
         // TODO(jeff): Implement
         var user_ip = '127.0.0.1';
+
+        if(params.ip) {
+          user_ip = params.ip;
+        }
 
         var query = 'INSERT INTO `users` SET user_id = ?, ' +
           'user_password = PASSWORD(?), date_created = NOW(), ' +
@@ -464,6 +469,38 @@ module.exports = {
         }
 
        handle.close_connection();
+      }
+    },
+
+    delete_user: {
+      params: {
+        uid: { required: true, type: 'string', info: 'user name'}
+      },
+
+      action: function(params, output) {
+
+        handle.create_connection();
+
+        var query = 'DELETE FROM `users` WHERE user_id = ?';
+        var values = params.uid;
+
+        query = handle.format(query, values);
+
+        console.log("delete_user (QUERY):", query);
+        handle.query(query, '', function(err, result, fields) {
+          if(err) {
+            console.log("ERROR: ", err);
+            output.fail('Invalid Request');
+          }
+
+          if( result == null ) {
+            output.fail('NULL');
+          } else {
+            output.win(result);
+          }
+        });
+
+        handle.close_connection();
       }
     },
 

@@ -77,7 +77,10 @@ curl -i -X GET -d rpc='{"method":"list_users","params":{}}' http://localhost:300
 curl -i -X GET -d rpc='{"method":"list_users","params":{ "uid": "admin"}}' http://localhost:3000/api/users/
 
 # Create user
-curl -i -X POST -d rpc='{"method":"create_user","params":{ "uid": "testme", "password": "boobies" }}' http://localhost:3000/api/users/create/
+curl -i -X POST -d rpc='{"method":"create_user","params":{ "uid": "testme", "password": "boobies", "ip": "192.168.151.126" }}' http://scorpio.local:3000/api/users/create/
+
+# Delete user
+curl -i -X DELETE -d rpc='{"method":"delete_user","params":{"uid": "testme"}}' http://scorpio.local:3000/api/users/
 
 # TODO: test duplicate user_id
 

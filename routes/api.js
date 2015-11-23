@@ -115,11 +115,26 @@ router.get('/users', function(req, res) {
 
 router.post('/users/create', function(req, res) {
 
+  // TODO(jeff): Convert IPv6 to IPv4 TCP address
+  var ip = req.ip;
   var rpc = JSON.parse(req.body.rpc);
   var params = rpc.params;
 
   rpcJs.input({
     input: { method: 'create_user', params: params },
+    callback: function(output) {
+      output_result(res, output);
+    }
+  });
+});
+
+router.delete('/users', function(req, res) {
+
+  var rpc = JSON.parse(req.body.rpc);
+  var params = rpc.params;
+
+  rpcJs.input({
+    input: { method: 'delete_user', params: params },
     callback: function(output) {
       output_result(res, output);
     }
