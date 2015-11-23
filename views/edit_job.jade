@@ -27,19 +27,23 @@ block content
 
   form(action=locals.loc.pathname, method='POST', novalidate)
     label(for='job_client') Client Contact
+    br
     input(type="text" id='job_client' name="client" required)
     br
     br
     label(for='job_number') Job Number
+    br
     input(type="text" id='job_number' name="jobnum" required)
     br
     br
     label(for='addr') Address
+    br
     input(type="text" id='addr' name="address")
     br
     br
 
-    label(for='job_status') Job Status:
+    label(for='job_status') Job Status
+    br
     select(name='status')
       option(value='fieldwork') Fieldwork
       option(value='drafting') Drafting
@@ -49,13 +53,15 @@ block content
     br
 
     label(for='date') Due date
+    br
     input(type="text" id='date' name="due_date")
     br
     br
 
     div(class='label')
       //- +check_err( locals.input_errs['job'].notes )
-      label(for='job_notes') Notes:
+      label(for='job_notes') Notes
+      br
       //- span(class='req') Required
     textarea(id='job_notes', name='notes', spellcheck='true', maxlength=4096)= job.JobNotes
     br
