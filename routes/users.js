@@ -16,8 +16,8 @@ router.get('/login', function(req, res, next) {
 });
 
 router.get('/logout', function(req, res, next) {
-  req.session.destroy();
-  console.log("session:", req.session);
+  req.session.destroy( function(err) {
+  });
 
   res.redirect('/index');
 });

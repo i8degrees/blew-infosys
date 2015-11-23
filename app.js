@@ -102,8 +102,9 @@ app.use( session({
     // NOTE(jeff): Requires HTTPS (SSL)
     secure: secure_cookies,
   },
-  resave: true,
-  saveUninitialized: true,
+
+  resave: false,
+  saveUninitialized: false,
 }));
 
 // Use connect-flash module for persistent state, i.e.: passing data across

@@ -8,13 +8,15 @@ block content
 
     br
     label(for='user_id') User Name
+    br
     input(type="text" id='user_id' name="user_id" required, tabindex=2)
     br
     label(for='password') Password
+    br
     input(type="password" id='password' name="password" required, tabindex=3)
     br
 
     button(type='reset', name='action', value='reset', tabindex=5) Reset
     button(type='submit', name='action', value='login', tabindex=4) Login
-
+    br
     a(href='/users/logout') Logout
