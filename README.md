@@ -90,7 +90,7 @@ bin/setup.sh
 - [x] Enable HTTP SSL server
 - [ ] Consider login through Google Apps..?
 - [ ] Evaluate IR_Property::Area SQL data type
-- [ ] Rename lib dir to models
+- [x] Rename lib dir to models
 - [ ] Ensure that all SQL queries are escaped!!!
 - [x] Remove count object in api.js
   * Confirmed that this is what causes us to need to specify pr_rows.length > 1 to test SQL results, i.e.: properties.jade && why results display is +1 off, i.e.: properties page

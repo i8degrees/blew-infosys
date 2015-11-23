@@ -3,8 +3,7 @@ var router = express.Router();
 var app = express();
 
 var rpc = require('rpc.js');
-var rpcJs = rpc.gateway( { schema: require('../lib/api') } );
-
+var rpcJs = rpc.gateway( { schema: require('../models/rpc') } );
 var assert = require("assert");
 
 // TODO(jeff): validation of fields!!

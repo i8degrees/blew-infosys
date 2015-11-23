@@ -1,9 +1,9 @@
 var express = require('express');
 var router = express.Router();
 
-var db_handle = require('../lib/db');
 var rpc = require('rpc.js');
-var rpcJs = rpc.gateway( { schema: require('../lib/api') } );
+var rpcJs = rpc.gateway( { schema: require('../models/rpc') } );
+// var assert = require('assert');
 
 output_result = function(res, result) {
   res.writeHead(200, {'Content-Type': 'application/json'});

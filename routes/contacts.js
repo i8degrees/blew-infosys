@@ -1,8 +1,10 @@
 var express = require('express');
 var router = express.Router();
+var app = express();
 
 var rpc = require('rpc.js');
-var rpcJs = rpc.gateway( { schema: require('../lib/api') } );
+var rpcJs = rpc.gateway( { schema: require('../models/rpc') } );
+// var assert = require('assert');
 
 // http://localhost:8888/api/contacts
 router.get('/contacts', function(req, res) {

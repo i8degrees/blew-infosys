@@ -1,8 +1,8 @@
-var assert = require("assert");
-var handle = require("../lib/db.js");
-
 // JSON RPC library
 var rpc = require('rpc.js');
+
+var assert = require("assert");
+var handle = require("../models/db.js");
 
 // rpc.server('http', {
 //   port: process.env.RPC_PORT || 8000,

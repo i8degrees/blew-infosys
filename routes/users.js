@@ -1,5 +1,10 @@
 var express = require('express');
 var router = express.Router();
+var app = express();
+
+var rpc = require('rpc.js');
+var rpcJs = rpc.gateway( { schema: require('../models/rpc') } );
+// var assert = require('assert');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {

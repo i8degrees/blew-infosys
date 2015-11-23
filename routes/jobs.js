@@ -2,9 +2,8 @@ var express = require('express');
 var router = express.Router();
 var app = express();
 
-var handle = require('../lib/db');
 var rpc = require('rpc.js');
-var rpcJs = rpc.gateway( { schema: require('../lib/api') } );
+var rpcJs = rpc.gateway( { schema: require('../models/rpc') } );
 // var assert = require('assert');
 
 // NOTE(jeff): HTTP routes
@@ -60,7 +59,6 @@ router.post('/create', function(req, res) {
     rpcJs.input({
       input: { method: 'create_job', params: params },
       callback: function(output) {
-
         res.redirect('/jobs');
       }
     });
