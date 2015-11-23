@@ -85,6 +85,8 @@ curl -i -X POST -d rpc='{"method":"create_user","params":{ "uid": 'testme' }}' h
 
 ## TODO
 
+- [ ] Add postinstall deployment step for setting up SQL databases; see
+bin/setup.sh
 - [x] Enable HTTP SSL server
 - [ ] Consider login through Google Apps..?
 - [ ] Evaluate IR_Property::Area SQL data type
