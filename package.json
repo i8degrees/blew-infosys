@@ -1,9 +1,20 @@
 {
-  "name": "blew",
-  "version": "0.0.0",
+  "name": "blew-infosys",
+  "version": "0.0.1",
+  "description": "job management app",
+  "author": "Jeffrey Carpenter <i8degrees@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/i8degrees/blew-infosys"
+  },
+  "bugs": {
+    "url": "https://github.com/i8degrees/blew-infosys/issues"
+  },
+  "license": "Simplified BSD",
   "private": true,
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js",
+    "postinstall": "./bin/heroku_deploy.sh"
   },
   "dependencies": {
     "body-parser": "~1.13.2",
@@ -20,12 +31,16 @@
     "mysql": "^2.8.0",
     "rpc.js": "^0.4.3",
     "serve-favicon": "~2.3.0",
-    "session-file-store": "0.0.22"
-  },
-  "devDependencies": {
+    "session-file-store": "0.0.22",
     "grunt": "^0.4.5",
+    "grunt-cli": "^0.1.13",
+    "grunt-contrib-jshint": "^0.11.3",
     "grunt-contrib-sass": "^0.9.2",
+    "grunt-contrib-uglify": "^0.11.0",
     "grunt-contrib-watch": "^0.6.1",
     "grunt-shell": "^1.1.2"
+  },
+  "engines": {
+    "node": "4.2.1"
   }
 }

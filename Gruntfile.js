@@ -75,6 +75,6 @@ module.exports = function(grunt) {
   grunt.registerTask('default', ['watch', 'sass:debug']);
   // grunt.registerTask('runapp', ['shell:runapp']);
 
-  // Called from package.json, via bin/heroku_deploy.sh
+  // Sourced in package.json -- called from bin/heroku_deploy.sh
   grunt.registerTask('heroku', ['sass:release']);
 }
