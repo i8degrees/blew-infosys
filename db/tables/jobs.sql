@@ -24,6 +24,20 @@ CREATE TABLE IF NOT EXISTS IR_properties(
   FULLTEXT KEY `search_index` (`JobNum`,`JobContact`,`JobNotes`, `JobAddress`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `users`;
+CREATE TABLE IF NOT EXISTS `users`(
+  `user_id` varchar(64) NOT NULL,
+
+  /* Must be long enough to support MySQL function, 'PASSWORD'. */
+  `user_password` varchar(41) NOT NULL,
+
+  `date_created` DATETIME NOT NULL,
+  `date_edited` DATETIME NOT NULL,
+  `user_ip` varchar(15) DEFAULT NULL,
+  PRIMARY KEY (`user_id`),
+  UNIQUE KEY `user_name` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 /*
     populate-tables.sql
     Synthetic job records for testing API and such

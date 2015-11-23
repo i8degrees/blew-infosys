@@ -70,6 +70,17 @@ curl -i -X GET -d rpc='{"method":"search","params":{ "query": "dev*"}}' http://l
 # TODO: test FULLTEXT AND operator
 # TODO: test FULLTEXT OR operator
 
+# List all users
+curl -i -X GET -d rpc='{"method":"list_users","params":{}}' http://localhost:3000/api/users/
+
+# List user by ID
+curl -i -X GET -d rpc='{"method":"list_users","params":{ "uid": "admin"}}' http://localhost:3000/api/users/
+
+# Create user
+curl -i -X POST -d rpc='{"method":"create_user","params":{ "uid": 'testme' }}' http://localhost:3000/api/users/create/
+
+# TODO: test duplicate user_id
+
 ```
 
 ## TODO

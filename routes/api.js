@@ -100,4 +100,30 @@ router.get('/search', function(req, res) {
   });
 });
 
+router.get('/users', function(req, res) {
+
+  var rpc = JSON.parse(req.body.rpc);
+  var params = rpc.params;
+
+  rpcJs.input({
+    input: { method: 'list_users', params: params },
+    callback: function(output) {
+      output_result(res, output);
+    }
+  });
+});
+
+router.post('/users/create', function(req, res) {
+
+  var rpc = JSON.parse(req.body.rpc);
+  var params = rpc.params;
+
+  rpcJs.input({
+    input: { method: 'create_user', params: params },
+    callback: function(output) {
+      output_result(res, output);
+    }
+  });
+});
+
 module.exports = router;
