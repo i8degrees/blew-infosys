@@ -39,9 +39,14 @@ router.post('/create', function(req, res) {
     var client_name = res.locals.job.client;
     var job_status = 'not assigned';
     var job_notes = res.locals.job.notes;
-    var due_date = res.locals.job.due_date;
+    var due_date = res.locals.job.due_date.toLowerCase();
     var addr = res.locals.job.address;
     var city = res.locals.job.city;
+
+    // TODO(jeff): This is only a stub!
+    if(due_date === 'asap') {
+      due_date = '2016-01-01 00:00:00';
+    }
 
     console.log("create job");
 
