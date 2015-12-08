@@ -12,9 +12,9 @@ var http = require('http');
  * Get port from environment and store in Express.
  */
 
-// var port = normalizePort(process.env.PORT || '3000');
-var port = normalizePort(process.env.PORT || '3000');
-app.set('port', port);
+var app_host = app.get('server_config');
+
+app_host.port = normalizePort(app_host.port);
 
 /**
  * Create HTTP server.
@@ -26,7 +26,7 @@ var server = http.createServer(app);
  * Listen on provided port, on all network interfaces.
  */
 
-server.listen(port);
+server.listen(app_host.port, app_host.ip);
 server.on('error', onError);
 server.on('listening', onListening);
 
@@ -55,7 +55,7 @@ function normalizePort(val) {
  */
 
 function onError(error) {
-  if (error.syscall !== 'listen') {
+  if(error.syscall !== 'listen') {
     throw error;
   }
 
@@ -83,9 +83,16 @@ function onError(error) {
  */
 
 function onListening() {
-  var addr = server.address();
-  var bind = typeof addr === 'string'
-    ? 'pipe ' + addr
-    : 'port ' + addr.port;
-  debug('Listening on ' + bind);
+
+  var bound_host = {
+    env: app.get('env') || 'development',
+    remote: app.get('remote') || false,
+    ip: server.address().address,
+    port: server.address().port,
+    family: server.address().family,
+  };
+
+  console.log('Listening at %s on %s', bound_host.ip, bound_host.port);
+  console.log('Site environment: %s', bound_host.env);
+  console.log('Remote resource fetching: %s ', bound_host.remote );
 }

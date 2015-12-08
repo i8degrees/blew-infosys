@@ -71,22 +71,43 @@ curl -i -X GET -d rpc='{"method":"search","params":{ "query": "dev*"}}' http://l
 # TODO: test FULLTEXT OR operator
 
 # List all users
-curl -i -X GET -d rpc='{"method":"list_users","params":{}}' http://localhost:3000/api/users/
+curl -i -X GET -d '{"params":{}}' http://scorpio.local:3000/api/v1/jobs
 
 # List user by ID
 curl -i -X GET -d rpc='{"method":"list_users","params":{ "uid": "admin"}}' http://localhost:3000/api/users/
 
+curl -i -X GET -d rpc='{"method":"list_users","params":{ "uid": "testme_ipv6", "ip": "192.168.151.200"}}' http://scorpio.local:3000/api/users/
+
 # Create user
 curl -i -X POST -d rpc='{"method":"create_user","params":{ "uid": "testme", "password": "boobies", "ip": "192.168.151.126" }}' http://scorpio.local:3000/api/users/create/
 
+curl -i -X POST -d rpc='{"method":"create_user","params":{ "uid": "testme_ipv6", "password": "boobies" }}' http://scorpio.local:3000/api/users/create/
+
+# Update user
+curl -i -X PUT -d rpc='{"params":{ "user_id": "testme", "password": "boobies"}}' http://scorpio.local:3000/api/users/
+
 # Delete user
 curl -i -X DELETE -d rpc='{"method":"delete_user","params":{"uid": "testme"}}' http://scorpio.local:3000/api/users/
+
+curl -i -X DELETE -d rpc='{"method":"delete_user","params":{"uid": "testme_ipv6"}}' http://scorpio.local:3000/api/users/
 
 # TODO: test duplicate user_id
 
 ```
 
 ## TODO
+
+- [ ] Test error handling when in a 'production' environment
+- [ ] Handle err.fatal in SQL callbacks
+- [ ] SQL timeouts
+- [ ] Prefix our RPC request URLs with the API version, i.e.: ```https://blew-infosys.herokuapp.com/api/v1/jobs``` and ```https://blew-infosys.herokuapp.com/api/v2/jobs```
+- [ ] Ensure that RPC request routes respond **only** with well-formed JSON content encoding, with a HTTP header of Content-Type: 'application/json'.
+- [ ] Implement error page for RPC routes
+  * Use HTTP status codes for err response; see [Diigo API: Responses](https://www.diigo.com/api_dev/docs#section-responses)
+- [ ] Implement request rate limiting for the public API
+- [ ] base64 encoding of passwords for HTTP transmission..?
+
+- [ ] Implement [HTTP Basic Authentication](https://en.wikipedia.org/wiki/Basic_access_authentication) for RPC API route authentication..?
 
 - [ ] Rename SQL tables
 - [ ] Add postinstall deployment step for setting up SQL databases; see

@@ -36,7 +36,7 @@ module.exports = function(grunt) {
     },
     watch: {
       config: {
-        files: [ 'Gruntfile.js', 'app.js' ],
+        files: [ 'Gruntfile.js', 'app.js', '.env*' ],
         options: {
           reload: true
         }
@@ -49,7 +49,6 @@ module.exports = function(grunt) {
       },
       scripts: {
         files: [ 'lib/*.js', 'models/*.js', 'routes/*.js' ],
-        // tasks: ['jshint'],
         options: {
           reload: true
         },
@@ -62,6 +61,18 @@ module.exports = function(grunt) {
         },
       },
     },
+    jshint: {
+      options: {
+        reporter: require('jshint-stylish')
+      },
+      all: [
+        'app.js',
+        'Gruntfile.js',
+        'lib/**/*.js',
+        'models/*.js',
+        'routes/*.js'
+      ],
+    },
   });
 
   // Dependencies
@@ -71,10 +82,15 @@ module.exports = function(grunt) {
   // https://github.com/gruntjs/grunt-contrib-sass
   grunt.loadNpmTasks('grunt-contrib-sass');
   grunt.loadNpmTasks('grunt-shell');
+  grunt.loadNpmTasks('grunt-contrib-jshint');
 
   grunt.registerTask('default', ['watch', 'sass:debug']);
+
+  // TODO(jeff): Install validation lints for HTML, CSS, SASS and so on
+  grunt.registerTask('lint', [ 'jshint' ]);
+
   // grunt.registerTask('runapp', ['shell:runapp']);
 
   // Sourced in package.json -- called from bin/heroku_deploy.sh
   grunt.registerTask('heroku', ['sass:release']);
-}
+};

@@ -1,6 +1,13 @@
 extends layout
 
 block content
-  h1= error.message
-  h2= error.status
-  pre #{error.stack}
+  - var message = error.message;
+  - var code = error.code || error.errno;
+  - var status = error.status || 400;
+  - var data = error.data || null;
+  - var stack = error.stack || null;
+  h1 #{message}
+  p Error Code: #{code}
+  p Error Data: #{data}
+  p HTTP status code: #{status}
+  pre #{stack}

@@ -2,9 +2,10 @@ var express = require('express');
 var router = express.Router();
 var app = express();
 
+var util = require('util');
+var assert = require("assert");
 var rpc = require('rpc.js');
 var rpcJs = rpc.gateway( { schema: require('../models/rpc') } );
-var assert = require("assert");
 
 // TODO(jeff): validation of fields!!
 
@@ -113,7 +114,7 @@ router.get('/assigned', function(req, res, next) {
       var result = output.result;
       for( var idx = 0; idx != result.length; ++idx ) {
 
-        if(result[idx].JobStatus != 0 &&
+        if(result[idx].JobStatus !== 0 &&
            result[idx].JobStatus != 'not assigned')
         {
           console.log();

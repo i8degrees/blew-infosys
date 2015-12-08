@@ -75,6 +75,8 @@ block content
     hr
 
     //- TODO(jeff): Additional validations!
-    if job.PropertyKey != null
-      a(href='/jobs/destroy/' + job.PropertyKey) destroy
-      | &#32;-&#32;
+    if user_authenticated == true
+      if job.PropertyKey != null
+        a(href='/jobs/destroy/' + job.PropertyKey) destroy
+        | &#32;-&#32;
+        a(href='/jobs/duplicate/' + job.PropertyKey) duplicate

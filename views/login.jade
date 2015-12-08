@@ -1,22 +1,61 @@
 extends layout
 
+block head
+  script.
+    $(document).ready(function() {
+
+      var toggle_password_field = function() {
+        var input_type = $("input#password").attr("type");
+
+        if(input_type === 'text') {
+          $("input#password").attr("type", "password");
+        } else if(input_type === 'password') {
+          $("input#password").attr("type", "text");
+        }
+      }
+      $('input#show_password').click(function() {
+        toggle_password_field();
+      });
+
+    });
+
 block content
   h2 Login
 
   //- novalidate
   form(action=locals.loc.pathname, method='POST')
+    .form-body(align='center')
+      if params.notifications.length > 0
+        label(for='errors') Errors
+        each err in params.notifications
+          p= err
+      br
+      label(for='user_id') User Name
+      br
+      input(type="text", id='user_id', name='user_id', value=params.user_id, required, tabindex=2)
+      br
+      label(for='password') Password
+      br
+      input(type="password", id='password', name='password', required, tabindex=3)
+      br
+      br
+      input(type="checkbox", id='store_cookie', name='store_cookie')
+      | Remember me
+      input(type="checkbox", id='show_password', name='show_password')
+      | Show password
+      br
+      br
+      button(type='submit', name='action', value='login', tabindex=4) Login
+      button(type='submit', name='action', value='signup', tabindex=5) Sign Up
+      br
+      br
 
-    br
-    label(for='user_id') User Name
-    br
-    input(type="text" id='user_id' name="user_id" required, tabindex=2)
-    br
-    label(for='password') Password
-    br
-    input(type="password" id='password' name="password" required, tabindex=3)
-    br
-
-    button(type='reset', name='action', value='reset', tabindex=5) Reset
-    button(type='submit', name='action', value='login', tabindex=4) Login
-    br
-    a(href='/users/logout') Logout
+      - var authenticated = false;
+      if user_authenticated
+        - authenticated = user_authenticated;
+      //- Do we really need this field???
+      input(type='hidden', name='user_auth', value=authenticated ? 'true' : 'false')
+      input(type='hidden', name='login_token', value='token')
+      .forgot(style='display: block;')
+        | Forgot your password? &#32;
+        a(href='/users/reset') Click here to reset your password

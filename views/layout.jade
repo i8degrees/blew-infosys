@@ -41,6 +41,18 @@ html
     // LiveReload
     script(src='//localhost:35729/livereload.js')
 
+    //- Additional JavaScripts
+    script(src="/js/jquery-1.11.1.js")
+
+    //- Additional head-level block (specific per page)
+    block head
+
+    //- FIXME(jeff): Implement
+    //- if locals.settings.env === 'development'
+      script(src="/js/lib/jquery-1.11.1.js")
+    //- else
+      script(src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js")
+
   body
     //- script.
       function go_back() {
@@ -58,12 +70,17 @@ html
     a(href="/status") Job Status
     br
     br
+    .navi(align='right')
+      if user_authenticated == false
+        a(href="/users/login") Login
+      else if user_authenticated == true
+        a(href="/users/logout") Logout
 
     div(class='align-text-center')
       form(id='cse-search-box-form-id', action='/jobs', method='GET')
         //- NOTE: Safari overrides our styling when the input field type is set to
         //- 'search'.
-        input(id='cse-search-input-box', class='search_input', type='text', name='q', spellcheck=false, autocomplete='off', value= locals.query, placeholder='Search by contact, number or address...', tabindex=1)
+        input(id='cse-search-input-box', class='search_input', type='text', name='query', spellcheck=false, autocomplete='off', value= locals.query, placeholder='Search by contact, number or address...', tabindex=1)
         //- br
         button(type='submit', class='search_button')
 

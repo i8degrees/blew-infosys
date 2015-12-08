@@ -8,6 +8,7 @@ mixin print_field()
       p #{arguments[1]}
 
 block content
+
   script.
     function go_back() {
       window.history.back();
@@ -28,7 +29,7 @@ block content
       p Job Status:
         b #{job.JobStatus}
 
-      if logged_in == true
+      if user_authenticated == true
         //- TODO: Validate!
         if job.PropertyKey != null
           a(href='/jobs/' + job.PropertyKey) [edit]

@@ -1,29 +1,19 @@
-// JSON RPC library
-var rpc = require('rpc.js');
-
 var assert = require("assert");
-var handle = require("../models/db.js");
-
-// rpc.server('http', {
-//   port: process.env.RPC_PORT || 8000,
-//   address: process.env.RPC_HOST || "localhost",
-
-//   // NOTE(jeff): API Schema for our HTTP-RPC server
-//   gateway: rpc.gateway({
-//     schema: require('./lib/api.js')
-//   })
-// });
+var util = require('util');
+var app_utils = require("../lib/users/utils.js");
+var Logger = require("../lib/Logger.js");
+var ecode = require("../lib/Err.js");
 
 // static
 var create_update_query = function(db, fields, values) {
-  var query = new String('');
+  var query = '';
   var pair_size = fields.length;
 
   assert(pair_size == values.length);
 
   for(var idx = 0; idx != pair_size; ++idx) {
 
-    if(idx == 0) {
+    if(idx === 0) {
       query += 'SET ';
     }
 
@@ -41,413 +31,520 @@ var create_update_query = function(db, fields, values) {
 // TODO(jeff): documentation!
 module.exports = {
 
-  // API methods
-  methods: {
-    list_pr: {
-      params: {
-        pid: { required: false, type: 'number', info: 'ID of the property' },
-        jobnum: { required: false, type: 'number', info: 'Drawing number'},
-        status: { required: false, type: 'number', info: 'status of job' },
-        order: { required: false, type: 'string', info: 'Column to sort results by'},
-        sort: { required: false, type: 'string', info: 'Ascending or descending order by'},
-        limit: { required: false, type: 'number', info: 'Maximum number of results'}
-      },
+  check_params: function(handle, params, callback) {
+    var response = {};
+    var err = null;
 
-      action: function(params, output) {
+    assert(handle.handle_ !== null && app_utils.function(handle.find) !== false,
+           "The handle function argument must be an instance of the Jobs " +
+           "class");
 
-        handle.create_connection();
+    assert(app_utils.function(handle.handle_.query) !== false,
+           "The callback function argument must be a function pointer");
 
-        if(params.order == null) {
-          params.order = "DateEdited";
-        }
+    assert(app_utils.function(callback) !== false,
+           "The callback function argument must be a function pointer");
 
-        if(params.sort == null) {
-          params.sort = "DESC";
-        }
+    if(app_utils.object(params) === false) {
+      err = {
+        code: ecode.http.unproccessable.code,
+        message: ecode.http.unproccessable.message,
+        data: 'Params object must be a JSON object'
+      };
+    }
 
-        // TODO(jeff): Impose minimum and maximum limits here!
-        // TODO(jefff): Implement pagination!
-        if(params.limit == null) {
-          params.limit = 50;
-        }
+    return err;
+  },
 
-        var opts = {
-          order: params.order,
-          sort: params.sort,
-          limit: params.limit
-        };
+  list_jobs: function(handle, params, callback) {
+    var err = {};
+    var response = {};
+    response.method = 'list_jobs';
 
-        if(params.pid) {
-          handle.find_property_by_job_id(params.pid, function(err, result, fields) {
-            if(err) {
-              console.log("ERROR: ", err);
-              output.fail('Invalid Request');
-            }
+    err = this.check_params(handle, params, callback);
 
-            output.win(result);
-          });
-        }
+    if(err) {
+      return callback({error: err});
+    }
 
-        if(params.jobnum) {
-          console.log("jobnum != null");
+    // TODO(jeff): End-user input sanitizing
 
-          handle.find_property_by_job_num(params.jobnum, function(err, result, fields) {
-            if(err) {
-              console.log("ERROR: ", err);
-              output.fail('Invalid Request');
-            }
-
-            output.win(result);
-          });
-        }
-
-        if(params.status) {
-          handle.find_job_by_status(params.status, function(err, result, fields) {
-            if(err) {
-              console.log("ERROR: ", err);
-              output.fail('Invalid Request');
-            }
-
-            if( result == null  ) {
-              output.fail('Invalid Request');
-            } else {
-              output.win(result);
-            }
-          });
-        }
-
-        // NOTE(jeff): Catch-all case
-        if(params.status == null) {
-          handle.find_all_jobs(opts, function(err, result, fields) {
-            if(err) {
-              console.log("ERROR: ", err);
-              output.fail('Invalid Request');
-            }
-
-            if( result == null  ) {
-              output.fail('Invalid Request');
-            } else {
-              output.win(result);
-            }
-          });
-        }
-
-       handle.close_connection();
+    handle.find(params, function(err, rows, fields) {
+      if(err) {
+        response.error = err;
+        return callback(response);
       }
-    },
 
-    create_job: {
-      params: {
-        jobnum: { required: true, type: 'string', info: 'Drawing number'},
-        client: { required: true, type: 'string', info: 'Client name'},
-        address: { required: false, type: 'string', info: 'Postal address'},
-        status: { required: false, type: 'number', info: 'status of job' },
-        due_date: { required: false, type: 'number', info: 'Need by date'},
-        notes: { required: false, type: 'string', info: 'Job notes'}
-      },
-
-      action: function(params, output) {
-
-        handle.create_connection();
-
-        var query = 'INSERT INTO `IR_properties`' +
-          '(DateCreated, DateEdited, JobNum, JobContact, JobStatus,' +
-          'JobAddress, JobNotes, JobDateNeeded)' +
-          'VALUES(NOW(), NOW(), ?, ?, ?,  ?, ?,  ?)';
-
-        // TODO(jeff): validation of fields
-        var values = [
-          params.jobnum,
-          params.client,
-          params.status,
-          params.address,
-          params.notes,
-          params.due_date
-        ];
-
-        query = handle.format(query, values);
-
-        console.log("create_job:", query);
-        handle.query(query, values, function(err, result, fields) {
-          if(err) {
-            console.log("ERROR: ", err);
-            output.fail('Invalid Request');
-          }
-
-          if( result == null ) {
-            output.fail('NULL');
-          } else {
-            output.win(result);
-          }
-        });
-
-        handle.close_connection();
+      response.result = rows;
+      if(response.result.length < 1) {
+        response.error = {};
+        response.error.status = ecode.http.not_found.code;
+        response.error.code = ecode.http.not_found.code;
+        response.error.message = ecode.http.not_found.message;
+        response.error.data = ecode.http.not_found.data;
       }
-    },
 
-    delete_job: {
-      params: {
-        pid: { required: true, type: 'number', info: 'ID of job'}
-      },
+      callback(response);
+    });
+  },
 
-      action: function(params, output) {
+  remove_job: function(handle, params, callback) {
+    var err = {};
+    var response = {};
+    response.method = 'remove_job';
 
-        handle.create_connection();
+    err = this.check_params(handle, params, callback);
 
-        var query = 'DELETE FROM `IR_properties` WHERE PropertyKey = ?';
-        var values = params.pid;
+    if(err) {
+      return callback({error: err});
+    }
 
-        console.log("delete_job (QUERY):", query, values);
-        handle.query(query, values, function(err, result, fields) {
-          if(err) {
-            console.log("ERROR: ", err);
-            output.fail('Invalid Request');
-          }
+    // TODO(jeff): End-user input sanitizing
 
-          if( result == null ) {
-            output.fail('NULL');
-          } else {
-            output.win(result);
-          }
-        });
-
-        handle.close_connection();
+    handle.remove(params, function(err, rows, fields) {
+      if(err) {
+        response.error = err;
+        return callback(response);
       }
-    },
 
-    update_pr: {
-      params: {
-        pid: { required: true, type: 'number', info: 'ID of property'},
-        jobnum: { required: false, type: 'string', info: 'Drawing number'},
-        notes: { required: false, type: 'string', info: 'Job notes'},
-        due_date: { required: false, type: 'string', info: 'Need by date'},
-        status: { required: false, type: 'number', info: 'status of job' },
-        contact: { required: false, type: 'string', info: 'Job contact'},
-        // email: { required: false, type: 'string', info: 'Job email'},
-        addr: { required: false, type: 'string', info: 'Job address'}
-      },
+      // response.result = rows;
 
-      action: function(params, output) {
-        handle.create_connection();
+      if(rows.affectedRows === 0) {
+        response.error = {};
+        response.error.status = ecode.http.not_found.code;
+        response.error.code = ecode.http.not_found.code;
+        response.error.message = ecode.http.not_found.message;
+        response.error.data = 'Unable to remove job';
+        return callback(response);
+      } else if(rows.affectedRows === 1) {
+        response.status = ecode.http.no_content.code;
+        return callback(response);
+      }
 
-        // TODO(jeff): validation of fields
-        if(params.pid) {
+    });
+  },
 
-          var query = 'UPDATE `IR_properties` ';
-          var fields = [];
-          var values = [];
+  update_job: function(handle, params, callback) {
+    var err = {};
+    var response = {};
+    response.method = 'update_job';
 
-          if(params.jobnum) {
-            fields.push('JobNum');
-            values.push(handle.escape(params.jobnum));
-          }
+    err = this.check_params(handle, params, callback);
 
-          if(params.notes) {
-            fields.push('JobNotes');
-            values.push(handle.escape(params.notes));
+    if(err) {
+      return callback({error: err});
+    }
 
-          }
+    // TODO(jeff): End-user input sanitizing
 
-          if(params.due_date) {
-            fields.push('JobDateNeeded');
-            values.push(handle.escape(params.due_date));
-          }
+    handle.update(params, function(err, rows, fields) {
+      if(err) {
+        response.error = err;
+        return callback(response);
+      }
 
-          if(params.status) {
-            fields.push('JobStatus');
-            values.push(handle.escape(params.status));
+      // response.result = rows;
 
-          }
+      if(rows === null) {
+        response.error = {};
+        response.error.status = ecode.http.not_found.code;
+        response.error.code = ecode.http.not_found.code;
+        response.error.message = ecode.http.not_found.message;
+        response.error.data = 'Failed to update job.';
+        return callback(response);
+      } else if(rows.affectedRows === 0) {
+        response.error = {};
+        response.error.status = ecode.http.not_found.code;
+        response.error.code = ecode.http.not_found.code;
+        response.error.message = ecode.http.not_found.message;
+        response.error.data = 'Failed to update job.';
+        return callback(response);
+      } else if(rows.affectedRows === 1) {
+        response.status = ecode.http.no_content.code;
+        return callback(response);
+      }
+    });
+  },
+};
+/*
+  // apiSchema: {
+    // API methods
+    methods: {
+      list_pr: {
+        params: {
+          pid: { required: false, type: 'number', info: 'ID of the property' },
+          jobnum: { required: false, type: 'number', info: 'Drawing number'},
+          status: { required: false, type: 'number', info: 'status of job' },
+          query: { required: false, type: 'string', info: 'Search terms'},
+          order: { required: false, type: 'string', info: 'Column to sort results by'},
+          sort: { required: false, type: 'string', info: 'Ascending or descending order by'},
+          limit: { required: false, type: 'number', info: 'Maximum number of results'}
+        },
 
-          if(params.contact) {
-            fields.push('JobContact');
-            values.push(handle.escape(params.contact));
-          }
+        action: function(params, output) {
+          var completed = false;
 
-          if(params.email) {
-            fields.push('JobEmail');
-            values.push(handle.escape(params.email));
-          }
+          handle.create_connection();
 
-          if(params.addr) {
-            fields.push('JobAddress');
-            values.push(handle.escape(params.addr));
-          }
+          // if(util.isNullOrUndefined(params.order) === true) {
+          //   params.order = "DateEdited";
+          // }
 
-          fields.push("DateEdited");
-          values.push('NOW()');
+          // if(util.isNullOrUndefined(params.sort) === true) {
+            // params.sort = "DESC";
+          // }
 
-          query += create_update_query(handle, fields, values);
-          query += ' WHERE PropertyKey = ?';
-          values = handle.escapeId(params.pid);
+          // TODO(jeff): Impose minimum and maximum limits here!
+          // TODO(jefff): Implement pagination!
+          // if(util.isNullOrUndefined(params.limit) === true) {
+            // params.limit = 50;
+          // }
 
-          if(fields.length > 0) {
-            console.log("update_pr: ", query);
-            handle.query(query, values, function(err, result, fields) {
+          var params = {
+            order: params.order,
+            sort: params.sort,
+            limit: params.limit
+          };
+
+          if(params.pid) {
+            handle.find_property_by_job_id(params.pid, function(err, result, fields) {
               if(err) {
                 console.log("ERROR: ", err);
                 output.fail('Invalid Request');
               }
 
-              if( result == null ) {
+              output.win(result);
+            });
+            completed = true;
+            return;
+          }
+
+          // if(params.jobnum) {
+          //   console.log("jobnum != null");
+
+          //   handle.find_property_by_job_num(params.jobnum, function(err, result, fields) {
+          //     if(err) {
+          //       console.log("ERROR: ", err);
+          //       output.fail('Invalid Request');
+          //     }
+
+          //     output.win(result);
+          //   });
+          //   completed = true;
+          // }
+
+          if(params.status) {
+            handle.find_job_by_status(params.status, function(err, result, fields) {
+              if(err) {
+                console.log("ERROR: ", err);
+                output.fail('Invalid Request');
+              }
+
+              if(result == null) {
+                output.fail('Invalid Request');
+              } else {
+                output.win(result);
+              }
+            });
+            completed = true;
+            return;
+          }
+
+          var user_query = '';
+          // TODO(jeff): validation of fields
+          if(params.query) {
+
+            user_query = params.query;
+            console.log('user_query:', user_query);
+
+            // * NOTE(jeff): Operator '+', i.e.: AND, uses additive word
+            // masking on search terms.
+            // * NOTE(jeff): Operator '-', i.e.: NOT, applies exclusion word
+            // masking on search terms.
+            // * NOTE(jeff): Operator '', i.e.: OR, applies no word masking on
+            // search terms.
+            var mask = {
+              inclusive: user_query.split('AND'),
+              exclusive: user_query.split('NOT'),
+              none: user_query.split('OR'),
+            };
+
+            // NOTE(jeff): ...End-user input sanitizing...
+            mask.inclusive = handle.escape(mask.inclusive);
+            mask.exclusive = handle.escape(mask.exclusive);
+            mask.none = handle.escape(mask.none);
+
+            console.log("mask.inclusive:", mask.inclusive);
+            console.log("mask.exclusive:", mask.exclusive);
+            console.log("mask.no_mask:", mask.none);
+
+            var query = "SELECT * FROM `IR_properties` WHERE MATCH" +
+              "(`JobNum`, `JobContact`, `JobNotes`, `JobAddress`) " +
+              "AGAINST(? IN BOOLEAN MODE);";
+            var values = [mask.none];
+
+            query = handle.format(query, values);
+
+            console.log("search_jobs (QUERY):", query);
+            handle.query(query, values, function(err, result, fields) {
+              // Failure; ...
+              if(err) {
+                console.log("ERROR:", err);
+                output.fail('Invalid request');
+              }
+
+              if(result == null) {
+                output.fail('NULL');
+              } else {
+                output.win(result);
+              }
+
+            });
+            completed = true;
+          } // end if params.query
+
+          // NOTE(jeff): Catch-all case
+          if(completed == false) {
+            handle.find_jobs(params, function(err, result, fields) {
+              if(err) {
+                console.log("ERROR: ", err);
+                output.fail('Invalid Request');
+              }
+
+              if(result == null) {
+                output.fail('Invalid Request');
+              } else {
+                output.win(result);
+              }
+            });
+            completed = true;
+          }
+
+         handle.close_connection();
+        }
+      },
+
+      create_job: {
+        params: {
+          jobnum: { required: true, type: 'string', info: 'Drawing number'},
+          client: { required: true, type: 'string', info: 'Client name'},
+          address: { required: false, type: 'string', info: 'Postal address'},
+          status: { required: false, type: 'number', info: 'status of job' },
+          due_date: { required: false, type: 'number', info: 'Need by date'},
+          notes: { required: false, type: 'string', info: 'Job notes'}
+        },
+
+        action: function(params, output) {
+
+          handle.create_connection();
+
+          var query = 'INSERT INTO `IR_properties`' +
+            '(DateCreated, DateEdited, JobNum, JobContact, JobStatus,' +
+            'JobAddress, JobNotes, JobDateNeeded)' +
+            'VALUES(NOW(), NOW(), ?, ?, ?,  ?, ?,  ?)';
+
+          // TODO(jeff): validation of fields
+          var values = [
+            params.jobnum,
+            params.client,
+            params.status,
+            params.address,
+            params.notes,
+            params.due_date
+          ];
+
+          query = handle.format(query, values);
+
+          console.log("create_job:", query);
+          handle.query(query, values, function(err, result, fields) {
+            if(err) {
+              console.log("ERROR: ", err);
+              output.fail('Invalid Request');
+            }
+
+            if(result == null) {
+              output.fail('NULL');
+            } else {
+              output.win(result);
+            }
+          });
+
+          handle.close_connection();
+        }
+      },
+
+      delete_job: {
+        params: {
+          pid: { required: true, type: 'number', info: 'ID of job'}
+        },
+
+        action: function(params, output) {
+
+          handle.create_connection();
+
+          var query = 'DELETE FROM `IR_properties` WHERE PropertyKey = ?';
+          var values = params.pid;
+
+          console.log("delete_job (QUERY):", query, values);
+          handle.query(query, values, function(err, result, fields) {
+            if(err) {
+              console.log("ERROR: ", err);
+              output.fail('Invalid Request');
+            }
+
+            if(result == null) {
+              output.fail('NULL');
+            } else {
+              output.win(result);
+            }
+          });
+
+          handle.close_connection();
+        }
+      },
+
+      update_pr: {
+        params: {
+          pid: { required: true, type: 'number', info: 'ID of property'},
+          jobnum: { required: false, type: 'string', info: 'Drawing number'},
+          notes: { required: false, type: 'string', info: 'Job notes'},
+          due_date: { required: false, type: 'string', info: 'Need by date'},
+          status: { required: false, type: 'number', info: 'status of job' },
+          contact: { required: false, type: 'string', info: 'Job contact'},
+          // email: { required: false, type: 'string', info: 'Job email'},
+          addr: { required: false, type: 'string', info: 'Job address'}
+        },
+
+        action: function(params, output) {
+          handle.create_connection();
+
+          // TODO(jeff): validation of fields
+          if(params.pid) {
+
+            var values = {};
+
+            if(params.jobnum) {
+              values.JobNum = handle.escape(params.jobnum);
+            }
+
+            if(params.notes) {
+              values.JobNotes = handle.escape(params.notes);
+            }
+
+            if(params.due_date) {
+              values.JobDateNeeded = handle.escape(params.due_date);
+            }
+
+            if(params.status) {
+              values.JobStatus = handle.escape(params.status);
+            }
+
+            if(params.contact) {
+              values.JobContact = handle.escape(params.contact);
+            }
+
+            if(params.email) {
+              values.JobEmail = handle.escape(params.email);
+            }
+
+            if(params.addr) {
+              values.JobAddress = handle.escape(params.addr);
+            }
+
+            if(values.length > 0) {
+              values.DateEdited = 'NOW()';
+            }
+
+            // query += create_update_query(handle, fields, values);
+            // query += ' WHERE PropertyKey = ?';
+            // values = handle.escape(params.pid);
+            var query = 'UPDATE `IR_properties` SET ? WHERE PropertyKey = ?';
+            query = handle.format(query, [values, params.pid]);
+            handle.query(query, function(err, result, fields) {
+              if(err) {
+                console.log("ERROR: ", err);
+                output.fail('Invalid Request');
+              }
+
+              if(result == null) {
                 output.fail('NULL');
               } else {
                 output.win(result);
               }
             });
-          } else {
-            // TODO(jeff): Better err message!
-            output.fail('Nothing to update!');
-          }
+          } // end if params.pid
         }
-
-        handle.close_connection();
-      }
-    },
-
-    search: {
-      params: {
-        query: { required: true, type: 'string', info: 'Search terms'}
       },
 
-      action: function(params, output) {
-        var user_query = '';
+      // user management
 
-        handle.create_connection();
+      create_user: {
+        params: {
+          user_id: { required: true, type: 'string', info: 'user name'},
+          // TODO(jeff): Rename to user_password
+          password: { required: true, type: 'string', info: 'unencrypted password'},
+          user_ip: { required: false, type: 'string', info: 'IPv4 TCP address of user'},
+        },
 
-        // TODO(jeff): validation of fields
-        if(params.query) {
+        action: function(params, output) {
 
-          user_query = params.query;
-          console.log('user_query:', user_query);
+          handle.create_connection();
 
-          // * NOTE(jeff): Operator '+', i.e.: AND, uses additive word masking on
-          // search terms.
-          // * NOTE(jeff): Operator '-', i.e.: NOT, applies exclusion word masking on
-          // search terms.
-          // * NOTE(jeff): Operator '', i.e.: OR, applies no word masking on search
-          // terms.
-          var mask = {
-            inclusive: user_query.split('AND'),
-            exclusive: user_query.split('NOT'),
-            none: user_query.split('OR'),
+          handle.add_user(params, function(err, result, fields) {
+            if(err) {
+              console.log("ERROR: ", err);
+              output.fail('Invalid Request');
+            }
+
+            if(result == null) {
+              output.fail('NULL');
+            } else {
+              result.message = 'Success! The user ' + params.user_id +
+                ' has been created.';
+              output.win(result);
+            }
+          });
+
+          handle.close_connection();
+        }
+      },
+
+      list_users: {
+        params: {
+          user_id: { required: false, type: 'string', info: 'user name' },
+          order: { required: false, type: 'string', info: 'Column to sort results by'},
+          sort: { required: false, type: 'string', info: 'Ascending or descending order by'},
+          limit: { required: false, type: 'number', info: 'Maximum number of results'}
+        },
+
+        action: function(params, output) {
+
+          handle.create_connection();
+
+          if(params.order == null) {
+            params.order = "DateCreated";
+          }
+
+          if(params.sort == null) {
+            params.sort = "DESC";
+          }
+
+          // TODO(jeff): Impose minimum and maximum limits here!
+          // TODO(jefff): Implement pagination!
+          if(params.limit == null) {
+            params.limit = 50;
+          }
+
+          var values = {
+            order: params.order,
+            sort: params.sort,
+            limit: params.limit
           };
 
-          // NOTE(jeff): ...End-user input sanitizing...
-          mask.inclusive = handle.escape(mask.inclusive);
-          mask.exclusive = handle.escape(mask.exclusive);
-          mask.none = handle.escape(mask.none);
-
-          console.log("mask.inclusive:", mask.inclusive);
-          console.log("mask.exclusive:", mask.exclusive);
-          console.log("mask.no_mask:", mask.none);
-
-          var query = "SELECT * FROM `IR_properties` WHERE MATCH" +
-            "(`JobNum`, `JobContact`, `JobNotes`, `JobAddress`) " +
-            "AGAINST(? IN BOOLEAN MODE);";
-          var values = [
-            mask.none,
-          ];
-
-          query = handle.format(query, values);
-
-          console.log("search_jobs (QUERY):", query);
-          handle.query(query, values, function(err, result, fields) {
-            // Failure; ...
-            if(err) {
-              console.log("ERROR:", err);
-              output.fail('Invalid request');
-            }
-
-            output.win(result);
-          });
-        } // end if params.query
-
-        handle.close_connection();
-      }
-    },
-
-    // user management
-
-    create_user: {
-      params: {
-        uid: { required: true, type: 'string', info: 'user name'},
-        password: { required: true, type: 'string', info: 'unencrypted password'},
-        ip: { required: false, type: 'string', info: 'IPv4 TCP address of user'},
-      },
-
-      action: function(params, output) {
-
-        handle.create_connection();
-
-        // TODO(jeff): Implement
-        var user_ip = '127.0.0.1';
-
-        if(params.ip) {
-          user_ip = params.ip;
-        }
-
-        var query = 'INSERT INTO `users` SET user_id = ?, ' +
-          'user_password = PASSWORD(?), date_created = NOW(), ' +
-          'date_edited = NOW(), user_ip = INET_ATON(?)';
-
-        // TODO(jeff): validation of fields
-        var values = [ params.uid, params.password, user_ip ];
-
-        query = handle.format(query, values);
-
-        console.log("create_user (QUERY):", query);
-        handle.query(query, values, function(err, result, fields) {
-          if(err) {
-            console.log("ERROR: ", err);
-            output.fail('Invalid Request');
+          if(params.user_id) {
+            values.user_id = params.user_id;
           }
 
-          if( result == null ) {
-            output.fail('NULL');
-          } else {
-            output.win(result);
-          }
-        });
-
-        handle.close_connection();
-      }
-    },
-
-    list_users: {
-      params: {
-        uid: { required: false, type: 'string', info: 'user name' },
-        order: { required: false, type: 'string', info: 'Column to sort results by'},
-        sort: { required: false, type: 'string', info: 'Ascending or descending order by'},
-        limit: { required: false, type: 'number', info: 'Maximum number of results'}
-      },
-
-      action: function(params, output) {
-
-        handle.create_connection();
-
-        if(params.order == null) {
-          params.order = "DateCreated";
-        }
-
-        if(params.sort == null) {
-          params.sort = "DESC";
-        }
-
-        // TODO(jeff): Impose minimum and maximum limits here!
-        // TODO(jefff): Implement pagination!
-        if(params.limit == null) {
-          params.limit = 50;
-        }
-
-        var values = {
-          order: params.order,
-          sort: params.sort,
-          limit: params.limit
-        };
-
-        if(params.uid) {
-          values.uid = params.uid;
           handle.find_user(values, function(err, result, fields) {
             if(err) {
               console.log("ERROR: ", err);
@@ -456,53 +553,78 @@ module.exports = {
 
             output.win(result);
           });
-        } else {
-          // NOTE(jeff): Catch-all
-          handle.find_user(values, function(err, result, fields) {
+
+          handle.close_connection();
+        }
+      },
+
+      remove_user: {
+        params: {
+          user_id: { required: true, type: 'string', info: 'user name'}
+        },
+
+        action: function(params, output) {
+
+          handle.create_connection();
+
+          handle.remove_user(params, function(err, result, fields) {
             if(err) {
               console.log("ERROR: ", err);
               output.fail('Invalid Request');
             }
 
-            output.win(result);
+            if(result == null) {
+              output.fail('NULL');
+            } else if(result.affectedRows == 0) {
+              output.fail('Could not remove user');
+            } else {
+              output.win(result);
+            }
           });
+
+          handle.close_connection();
         }
-
-       handle.close_connection();
-      }
-    },
-
-    delete_user: {
-      params: {
-        uid: { required: true, type: 'string', info: 'user name'}
       },
 
-      action: function(params, output) {
+      update_user: {
+        params: {
+          user_id: { required: true, type: 'string', info: 'user name'},
+          user_password: { required: false, type: 'string', info: 'unencrypted password'},
+          user_ip: { required: false, type: 'string', info: 'IPv4 TCP address of user'},
+          last_login: { required: false, type: 'string', info: 'last login timestamp'}
+        },
 
-        handle.create_connection();
+        action: function(params, output) {
 
-        var query = 'DELETE FROM `users` WHERE user_id = ?';
-        var values = params.uid;
+          handle.create_connection();
 
-        query = handle.format(query, values);
+          handle.update_user(params, function(err, result, fields) {
+            if(err) {
+              console.log("ERROR: ", err);
+              output.fail('Invalid Request');
+            }
 
-        console.log("delete_user (QUERY):", query);
-        handle.query(query, '', function(err, result, fields) {
-          if(err) {
-            console.log("ERROR: ", err);
-            output.fail('Invalid Request');
-          }
+            if(result == null) {
+              output.fail('NULL');
+            } else {
+              output.win(result);
+            }
+          });
 
-          if( result == null ) {
-            output.fail('NULL');
-          } else {
-            output.win(result);
-          }
-        });
-
-        handle.close_connection();
-      }
-    },
-
-  }
+          handle.close_connection();
+        }
+      },
+    }
+    // } // end apiSchema
 };
+*/
+
+// rpc.server('http', {
+//   port: process.env.RPC_PORT || 8000,
+//   address: process.env.RPC_HOST || "0.0.0.0",
+
+//   // NOTE(jeff): API Schema for our HTTP JSON-RPC server
+//   gateway: rpc.gateway({
+//     schema: module.exports.apiSchema
+//   })
+// });

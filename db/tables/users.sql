@@ -18,11 +18,18 @@ CREATE TABLE IF NOT EXISTS `users`(
   /* Must be long enough to support MySQL function, 'PASSWORD'. */
   `user_password` varchar(41) NOT NULL,
 
+  `user_email` varchar(64) NOT NULL,
   `date_created` DATETIME NOT NULL,
-  `date_edited` DATETIME NOT NULL,
-  `user_ip` INT(4) UNSIGNED DEFAULT NULL,
+  /*`last_login` DATETIME NOT NULL,*/
+  /*user_api_key VARCHAR(40) NULL DEFAULT '',*/
+  /*user_email VARCHAR(255) NOT NULL,*/
+
+  /* TCP/IPv6 address; stored as 32-byte hexadecimal */
+  `user_ip` CHAR(32) NULL,
+  /*`user_ip` VARCHAR(15) NULL,*/
+
   PRIMARY KEY (`user_id`),
-  UNIQUE KEY `user_name` (`user_id`)
+  /*UNIQUE KEY `user_name` (`user_id`)*/
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*
@@ -34,8 +41,8 @@ LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 
 INSERT INTO `users`
-(`user_id`, `user_password`, `date_created`, `date_edited`, `user_ip`) VALUES
-    ('admin', PASSWORD('admin'), NOW(), NOW(), INET_ATON('127.0.0.1') );
+(`user_id`, `user_password`, `date_created`, `user_ip`) VALUES
+    ('admin', PASSWORD('admin'), NOW(), NOW(), HEX(INET6_ATON('127.0.0.1')) );
 
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
